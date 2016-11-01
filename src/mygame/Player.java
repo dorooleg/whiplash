@@ -17,167 +17,83 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 
 import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector2f;
 
-public class Player  extends AbstractControl{
-    
-    
-   
-    public boolean up_key, 
-            down_key, 
-            left_key, 
+public class Player extends AbstractControl {
+
+    public boolean up_key,
+            down_key,
+            left_key,
             right_key;
-    
-    public boolean up_mause,
-            down_mause,
-            left_mause,
-            right_mause;
-    
+    public boolean move_mouse;
     public boolean rotate;
-    
-    public Float  speed = 100f,
+    public Float speed = 100f,
             speed_mouse = 10f;
-    // speed of the player
-    // lastRotation of the player
-    private float lastRotation;
+    public Vector2f mouse_position;
+    public float trans;
 
     public Player() {
-        
-    }
-    public Player(int width, int height) {
-//        this.screenWidth  = width;
-//        this.screenHeight = height;
+        mouse_position = new Vector2f(0, 0);
+
+        trans = 0f;
     }
 
     @Override
     protected void controlUpdate(float tpf) {
-        
         if (rotate) {
-//            Vector3f v = spatial.getLocalTranslation();
-            
-            spatial.rotate(0, 0 , tpf*speed_mouse);
-//            reset();
+            spatial.rotate(0, 0, 1);
+//            mouse_position_old = mouse_position;
+
         }
-        if (left_mause) {
-            spatial.rotate(0, 0, -tpf*speed_mouse);
-            left_mause = false;
-        }
-        if (right_mause){
-            spatial.rotate(0, 0, tpf*speed_mouse); 
-            right_mause = false;
+
+        if (move_mouse) {
+
+            Vector3f pos = spatial.getLocalTranslation();
+            Vector2f v = new Vector2f();
+            v.x = mouse_position.x - pos.x;
+            v.y = mouse_position.y - pos.y;
+
+            float len = v.length();
+
+            float angel = FastMath.asin(v.y / len);
+
+
+            spatial.rotate(0, 0, FastMath.sign(v.x) * (angel - trans));
+            trans = angel;
+
         }
 
         if (left_key) {
-//                  Vector3f v = spatial.getLocalTranslation();
-//                  spatial.setLocalTranslation(v.x - .01f, v.y, v.z);
             spatial.move(-tpf * speed, 0, 0);
-//            reset();
-        } 
+        }
         if (right_key) {
-//                  Vector3f v = spatial.getLocalTranslation();
-//                  spatial.setLocalTranslation(v.x - .01f, v.y, v.z);
             spatial.move(tpf * speed, 0, 0);
-//            reset();
         }
-        if (up_key){
-//                  Vector3f v = spatial.getLocalTranslation();
-//                  spatial.setLocalTranslation(v.x, v.y + .01f, v.z);
+        if (up_key) {
             spatial.move(0, tpf * speed, 0);
-//            reset();
         }
-        if (down_key){
-//                  Vector3f v = spatial.getLocalTranslation();
-//                  spatial.setLocalTranslation(v.x, v.y - .01f, v.z);
+        if (down_key) {;
             spatial.move(0, -tpf * speed, 0);
-//            reset();
+
         }
     }
 
-
     public void applyGravity(Vector3f gravity) {
-        
     }
 
     @Override
-    protected void controlRender(RenderManager rm, ViewPort vp) {}
+    protected void controlRender(RenderManager rm, ViewPort vp) {
+    }
 
-    // reset the moving values (i.e. for spawning)
     public void reset() {
         up_key = false;
         down_key = false;
         left_key = false;
         right_key = false;
-        
-        up_mause = false;
-        down_mause = false;
-        left_mause = false;
-        right_mause = false;
-        
+
+        move_mouse = false;
+
         rotate = false;
     }
-
-   
-   
-//    Player(Geometry player, InputManager inpu){
-//        geom = player;
-//        inputManager.deleteMapping( SimpleApplication.INPUT_MAPPING_MEMORY );
-//        inputManager.addMapping("Pause",  new KeyTrigger(KeyInput.KEY_P));
-//
-//        inputManager.addMapping("Left",   new KeyTrigger(KeyInput.KEY_A),
-//                                          new KeyTrigger(KeyInput.KEY_LEFT));
-//
-//        inputManager.addMapping("Up",   new KeyTrigger(KeyInput.KEY_W),
-//                                        new KeyTrigger(KeyInput.KEY_UP));
-//
-//        inputManager.addMapping("Down",   new KeyTrigger(KeyInput.KEY_S),
-//                                          new KeyTrigger(KeyInput.KEY_DOWN));
-//
-//        inputManager.addMapping("Right",  new KeyTrigger(KeyInput.KEY_D),
-//                                          new KeyTrigger(KeyInput.KEY_RIGHT));
-//
-//
-//        inputManager.addMapping("Rotate", new KeyTrigger(KeyInput.KEY_SPACE),
-//                                          new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
-//
-//        inputManager.addMapping("Mouse_Up",   new MouseAxisTrigger(MouseInput.AXIS_Y,true));
-//        inputManager.addMapping("Mouse_Down", new MouseAxisTrigger(MouseInput.AXIS_Y,false));
-//
-//        inputManager.addMapping("Mouse_Right", new MouseAxisTrigger(MouseInput.AXIS_X,true));
-//        inputManager.addMapping("Mouse_Left",  new MouseAxisTrigger(MouseInput.AXIS_X,false));
-//
-//
-//
-//        inputManager.addListener(new AnalogListener() {
-//            @Override
-//            public void onAnalog(String name, float value, float tpf) {
-//                if (name.equals("Rotate")) {
-//                  geom.rotate(0, 0, .1f);
-//                }else  if (name.equals("Mouse_Up")) {
-//                  geom.rotate(0, 0, 10);
-//                }else  if (name.equals("Mouse_Down")) {
-//                  geom.rotate(0, 0, -10);
-//                }else  if (name.equals("Mouse_Left")) {
-//                  Vector3f v = geom.getLocalTranslation();
-//                  geom.setLocalTranslation(v.x - value , v.y, v.z);
-//                }else  if (name.equals("Mouse_Right")) {
-//                  Vector3f v = geom.getLocalTranslation();
-//                  geom.setLocalTranslation(v.x , v.y, v.z);
-//                }else  if (name.equals("Left")) {
-//                  Vector3f v = geom.getLocalTranslation();
-//                  geom.setLocalTranslation(v.x - .01f, v.y, v.z);
-//                } else if (name.equals("Right")) {
-//                  Vector3f v = geom.getLocalTranslation();
-//                  geom.setLocalTranslation(v.x - .01f, v.y, v.z);
-//                }else  if (name.equals("Up")){
-//                  Vector3f v = geom.getLocalTranslation();
-//                  geom.setLocalTranslation(v.x, v.y + .01f, v.z);
-//                }else  if (name.equals("Down")){
-//                  Vector3f v = geom.getLocalTranslation();
-//                  geom.setLocalTranslation(v.x, v.y - .01f, v.z);
-//                }
-//            }
-//        }, "Left", "Right", "Rotate", "Up","Down","Mouse_Up",
-//            "Mouse_Down","Mouse_Right","Mouse_Left");
-//
-//    }
-    
 }

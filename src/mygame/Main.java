@@ -21,6 +21,8 @@ import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
 import com.jme3.ui.Picture;
 
+import com.jme3.cursors.plugins.JmeCursor;
+
 public class Main extends SimpleApplication implements ActionListener,
                 AnalogListener{
 
@@ -108,49 +110,60 @@ public class Main extends SimpleApplication implements ActionListener,
   
   @Override
     public void simpleUpdate(float tpf) {
+    }
 
+    public void onAction(String name, boolean isPressed, float tpf) {
+
+        if (name.equals("Rotate")) {
+            player.getControl(Player.class).rotate = isPressed;
+        }
+        if (name.equals("MouseMoved")) {
+            player.getControl(Player.class).mouse_position =
+                    inputManager.getCursorPosition();
+            player.getControl(Player.class).move_mouse = isPressed;
+        }
+        if (name.equals("Up")) {
+            player.getControl(Player.class).up_key = isPressed;
+        }
+        if (name.equals("Down")) {
+            player.getControl(Player.class).down_key = isPressed;
+        }
+        if (name.equals("Left")) {
+            player.getControl(Player.class).left_key = isPressed;
+        }
+        if (name.equals("Right")) {
+            player.getControl(Player.class).right_key = isPressed;
+        }
     }
-  
-  
-   public void onAction(String name, boolean isPressed, float tpf) {
-     
-       if (name.equals("Rotate")){
-                player.getControl(Player.class).rotate = isPressed;
-            } 
-       if (name.equals("Mouse_Up")){
-                player.getControl(Player.class).up_mause = isPressed;
-            } 
-       if (name.equals("Mouse_Down")){
-                player.getControl(Player.class).down_mause = isPressed;
-            } 
-       if (name.equals("Mouse_Left")){
-                player.getControl(Player.class).left_mause = isPressed;
-            } 
-       if (name.equals("Mouse_Right")){
-                player.getControl(Player.class).right_mause = isPressed;
-            } 
-       if (name.equals("Up")) {
-                player.getControl(Player.class).up_key = isPressed;
-            } 
-       if (name.equals("Down")) {
-                player.getControl(Player.class).down_key =isPressed;
-            }
-       if (name.equals("Left")) {
-                player.getControl(Player.class).left_key = isPressed;
-            } if (name.equals("Right")) {
-                player.getControl(Player.class).right_key = isPressed;
-            } 
+
+    public void onAnalog(String name, float value, float tpf) {
     }
-   public void onAnalog(String name, float value, float tpf) {
-       
-   }
-   
-   
-   private void initCamera(){    
+
+    private void initCamera() {
         cam.setLocation(new Vector3f(0.0f, 0.0f, 0.5f));
         getFlyByCamera().setEnabled(false);
         setDisplayStatView(false);
         setDisplayFps(false);
         cam.setParallelProjection(true);
-   }
+    }
+
+    private Spatial getSpatial(String name) {
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setColor("Color", ColorRGBA.Blue);
+
+        Node node = new Node("Player");
+        node.setMaterial(mat);
+
+        Picture pic;
+        pic = new Picture("Player");
+        pic.setMaterial(mat);
+        float width = 50;
+        float height = 50;
+        pic.setWidth(width);
+        pic.setHeight(height);
+        pic.move(-width / 2f, -height / 2f, 0);
+        node.attachChild(pic);
+
+        return node;
+    }
 };
