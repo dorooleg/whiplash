@@ -34,14 +34,6 @@ public class ServerMain extends SimpleApplication {
             Logger.getLogger(ServerMain.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        Box b = new Box(1, 1, 1);
-        Geometry geom = new Geometry("Box", b);
-
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Blue);
-        geom.setMaterial(mat);
-
-        rootNode.attachChild(geom);
     }
 
     @Override
