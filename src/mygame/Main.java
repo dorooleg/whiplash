@@ -24,7 +24,7 @@ public class Main {
 
     public static void main(String[] args) {
         AppSettings settings = new AppSettings(true);
-        settings.setResolution(640, 480);
+        settings.setResolution(640, 640);
         MainMenu app = new MainMenu();
         app.setShowSettings(false); // splashscreen
         app.setSettings(settings);
