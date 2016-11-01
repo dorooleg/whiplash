@@ -17,9 +17,12 @@ public class StartScreen extends AbstractAppState implements ScreenController {
   private Nifty nifty;
   private Application app;
   private Screen screen;
-
+  
+  private MainMenu owner;
+  
   /** custom methods */
-  public StartScreen() {
+  public StartScreen(MainMenu owner) {
+      this.owner = owner;
     /** You custom constructor, can accept arguments */
   }
   public void startServer()  {
@@ -32,6 +35,7 @@ public class StartScreen extends AbstractAppState implements ScreenController {
 
   public void startGame(String nextScreen) {
     nifty.gotoScreen(nextScreen);  // switch to another screen
+    owner.init_player();
   }
 
   public void quitGame() {

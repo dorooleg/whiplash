@@ -1,24 +1,13 @@
 package mygame;
 
-import com.jme3.app.SimpleApplication;
-import com.jme3.input.InputManager;
-import com.jme3.math.ColorRGBA;
-import com.jme3.input.KeyInput;
-import com.jme3.input.MouseInput;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.AnalogListener;
-import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.MouseAxisTrigger;
-import com.jme3.input.controls.MouseButtonTrigger;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
-
 import com.jme3.math.FastMath;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 
 public class Player extends AbstractControl {
 
@@ -28,6 +17,9 @@ public class Player extends AbstractControl {
             right_key;
     public boolean move_mouse;
     public boolean rotate;
+    
+    public boolean click_mouse;
+    
     public Float speed = 100f,
             speed_mouse = 10f;
     public Vector2f mouse_position;
@@ -73,10 +65,18 @@ public class Player extends AbstractControl {
         if (up_key) {
             spatial.move(0, tpf * speed, 0);
         }
-        if (down_key) {;
+        if (down_key) {
             spatial.move(0, -tpf * speed, 0);
 
         }
+        
+        if (click_mouse){
+            Node cur_node = (Node)spatial;
+            Spatial child = cur_node.getChild("whip");
+            child.rotate(0, 0, 10);
+
+        }
+        
     }
 
     public void applyGravity(Vector3f gravity) {
