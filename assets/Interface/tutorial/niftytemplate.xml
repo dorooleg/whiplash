@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">  
+  <useStyles filename="nifty-default-styles.xml" />
+  <useControls filename="nifty-default-controls.xml" />
+  
+  <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <!-- This is a minimal example of Nifty's Java syntax.         -->
+  <!-- It shows one screen with one layer, containing one panel. -->
+  <!-- The panel contains one button control.                    -->
+  <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- layout Template: screen, layer, panel -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <screen id="Screen_ID">
+    <layer id="Layer_ID" childLayout="center">
+      <panel id="Panel_ID" width="100%" height="100%" childLayout="center" >  
+          <control name="button" label="Hello Nifty" id="Control_ID" align="center" valign="center" 
+                   width="15%" height="5%" visibleToMouse="true" > 
+          </control>
+      </panel>
+    </layer>
+  </screen>
+</nifty>
