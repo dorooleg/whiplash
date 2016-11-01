@@ -22,6 +22,13 @@ public class StartScreen extends AbstractAppState implements ScreenController {
   public StartScreen() {
     /** You custom constructor, can accept arguments */
   }
+  public void startServer()  {
+    System.out.println("server");
+  }
+  
+  public void startClient()  {
+    System.out.println("client");
+  }
 
   public void startGame(String nextScreen) {
     nifty.gotoScreen(nextScreen);  // switch to another screen
