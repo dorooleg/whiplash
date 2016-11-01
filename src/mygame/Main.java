@@ -66,10 +66,7 @@ public class Main extends SimpleApplication implements ActionListener,
 
 
         inputManager.addListener(this, "Left", "Right", "Rotate", "Up", "Down", "MouseMoved");
-
-//    inputManager.setMouseCursor( (JmeCursor) assetManager.loadAsset());
-//    inputManager.setCursorVisible(false);
-
+        
         player = getSpatial("Player");
         player.setLocalTranslation(settings.getWidth() / 2, settings.getHeight() / 2, 0f);
         player.addControl(new Player());
