@@ -42,8 +42,8 @@ public class Player extends AbstractControl {
     @Override
     protected void controlUpdate(float tpf) {
         if (rotate) {
-            spatial.rotate(0, 0, 1);
-//            mouse_position_old = mouse_position;
+            spatial.rotate(0, 0, FastMath.PI);
+            rotate = false;
 
         }
 

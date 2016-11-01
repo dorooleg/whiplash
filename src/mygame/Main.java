@@ -22,6 +22,7 @@ import com.jme3.system.AppSettings;
 import com.jme3.ui.Picture;
 
 import com.jme3.cursors.plugins.JmeCursor;
+import com.jme3.texture.Texture2D;
 
 public class Main extends SimpleApplication implements ActionListener,
                 AnalogListener{
@@ -33,82 +34,51 @@ public class Main extends SimpleApplication implements ActionListener,
         app.setShowSettings(false); // splashscreen
         app.setSettings(settings);
         app.start();
-  }
-  protected Geometry geom;
+    }
+    protected Geometry geom;
+    private Spatial player;
 
-   private Spatial player;
-  
-  @Override
-  public void simpleInitApp() {
-    Box b = new Box(0.1f, 0.1f, 0.1f);
-    
-    geom = new Geometry("Player", b);
-    Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-    mat.setColor("Color", ColorRGBA.Blue);
-    geom.setMaterial(mat);
-    
-//    rootNode.attachChild(geom);
-            
-    initCamera();
-    
-    
-//    inputManager.addMapping("left", new KeyTrigger(KeyInput.KEY_LEFT));
-//    inputManager.addMapping("right", new KeyTrigger(KeyInput.KEY_RIGHT));
-//    inputManager.addMapping("up", new KeyTrigger(KeyInput.KEY_UP));
-//    inputManager.addMapping("down", new KeyTrigger(KeyInput.KEY_DOWN));
-//    inputManager.addMapping("return", new KeyTrigger(KeyInput.KEY_RETURN));
-    
-    
-//    inputManager.deleteMapping( SimpleApplication.INPUT_MAPPING_MEMORY );
-
-    inputManager.addMapping("Left",   new KeyTrigger(KeyInput.KEY_A),
-                                      new KeyTrigger(KeyInput.KEY_LEFT));
-
-    inputManager.addMapping("Up",   new KeyTrigger(KeyInput.KEY_W),
-                                    new KeyTrigger(KeyInput.KEY_UP));
-
-    inputManager.addMapping("Down",   new KeyTrigger(KeyInput.KEY_S),
-                                      new KeyTrigger(KeyInput.KEY_DOWN));
-
-    inputManager.addMapping("Right",  new KeyTrigger(KeyInput.KEY_D),
-                                      new KeyTrigger(KeyInput.KEY_RIGHT));
+    @Override
+    public void simpleInitApp() {
+        initCamera();
 
 
-    inputManager.addMapping("Rotate", new KeyTrigger(KeyInput.KEY_SPACE));
+        inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A),
+                new KeyTrigger(KeyInput.KEY_LEFT));
 
-    inputManager.addMapping("Mouse_Up",   new MouseAxisTrigger(MouseInput.AXIS_Y,true));
-    inputManager.addMapping("Mouse_Down", new MouseAxisTrigger(MouseInput.AXIS_Y,false));
+        inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W),
+                new KeyTrigger(KeyInput.KEY_UP));
 
-    inputManager.addMapping("Mouse_Right", new MouseAxisTrigger(MouseInput.AXIS_X,true));
-    inputManager.addMapping("Mouse_Left",  new MouseAxisTrigger(MouseInput.AXIS_X,false));
+        inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S),
+                new KeyTrigger(KeyInput.KEY_DOWN));
 
-    inputManager.addListener(this,"Left", "Right", "Rotate", "Up","Down","Mouse_Up",
-            "Mouse_Down","Mouse_Right","Mouse_Left");
-    
-    
-    
-    Node node = new Node("Player");
-    node.setMaterial(mat);
-    
-    Picture pic;
-    pic = new Picture("Player");
-    pic.setMaterial(mat);
-    float width = 50;
-    float height =50;
-    pic.setWidth(width);
-    pic.setHeight(height);
-    node.attachChild(pic);
-    
-    
-    player = node;
-    player.setLocalTranslation(settings.getWidth()/2, settings.getHeight()/2, 0f);
-    player.addControl(new Player());
+        inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D),
+                new KeyTrigger(KeyInput.KEY_RIGHT));
+
+
+        inputManager.addMapping("Rotate", new KeyTrigger(KeyInput.KEY_SPACE));
+
+        inputManager.addMapping("MouseMoved", new MouseAxisTrigger(MouseInput.AXIS_Y, true),
+                new MouseAxisTrigger(MouseInput.AXIS_Y, false),
+                new MouseAxisTrigger(MouseInput.AXIS_X, true),
+                new MouseAxisTrigger(MouseInput.AXIS_X, false));
         
-    
-    guiNode.attachChild(player);
-  }
-  
-  @Override
+
+
+        inputManager.addListener(this, "Left", "Right", "Rotate", "Up", "Down", "MouseMoved");
+
+//    inputManager.setMouseCursor( (JmeCursor) assetManager.loadAsset());
+//    inputManager.setCursorVisible(false);
+
+        player = getSpatial("Player");
+        player.setLocalTranslation(settings.getWidth() / 2, settings.getHeight() / 2, 0f);
+        player.addControl(new Player());
+
+
+        guiNode.attachChild(player);
+    }
+
+    @Override
     public void simpleUpdate(float tpf) {
     }
 
@@ -144,26 +114,56 @@ public class Main extends SimpleApplication implements ActionListener,
         getFlyByCamera().setEnabled(false);
         setDisplayStatView(false);
         setDisplayFps(false);
+        inputManager.setCursorVisible(false);
         cam.setParallelProjection(true);
+//        cam.set
     }
 
     private Spatial getSpatial(String name) {
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Blue);
+        if (name  == "Player"){
+            Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            mat.setColor("Color", ColorRGBA.Blue);
 
-        Node node = new Node("Player");
-        node.setMaterial(mat);
+            Node node = new Node(name);
+            node.setMaterial(mat);
 
-        Picture pic;
-        pic = new Picture("Player");
-        pic.setMaterial(mat);
-        float width = 50;
-        float height = 50;
-        pic.setWidth(width);
-        pic.setHeight(height);
-        pic.move(-width / 2f, -height / 2f, 0);
-        node.attachChild(pic);
+            Picture pic;
 
-        return node;
+            pic = new Picture(name);
+            pic.setMaterial(mat);
+            float width = 50;
+            float height = 50;
+            pic.setWidth(width);
+            pic.setHeight(height);
+            pic.move(-width / 2f, -height / 2f, 0);
+
+
+            Box box1 = new Box( 5,5,0);
+            Geometry blue = new Geometry(name, box1);
+            Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            mat1.setColor("Color", ColorRGBA.Red);
+            blue.setMaterial(mat1);
+            blue.move(-width / 2f , 0, 0);
+
+         
+            Picture pic1;
+            pic1 = new Picture(name);
+            Texture2D tex = (Texture2D)assetManager.loadTexture(
+                    "/Textures/spiral.png");
+            pic1.setTexture(assetManager, tex, true);
+
+            pic1.setWidth(width);
+            pic1.setHeight(height);
+            pic1.move(-width/2f - 50, -height/2f, 0);
+            
+            node.attachChild(pic1);
+         
+            node.attachChild(pic);
+
+            node.attachChild(blue);
+
+            return node;
+        }
+        return null;
     }
 };
