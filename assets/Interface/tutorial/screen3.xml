@@ -3,17 +3,7 @@
        xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
   <useStyles filename="nifty-default-styles.xml" />
   <useControls filename="nifty-default-controls.xml" />
-  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-  <!-- This demo shows a two-screen layout in Nifty's XML syntax.         -->
-  <!-- You see two screens with two layers each, contain several panels.  -->
-  <!-- The panels contain images, text, and controls (label and buttons). -->
-  <!-- Buttons have an interaction defined, and some of the text          -->
-  <!-- is dynamically defined, using the MyStartScreen controller.        -->
-  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-  
-  <!-- +++++++++++++++++++++++++++++++++++++++ -->
-  <!-- lay out the start screen/layers/panels -->
-  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+
   <screen id="start" controller="mygame.StartScreen">
     <layer id="background" childLayout="center">
       <image filename="Interface/tutorial/start-background.png" 
@@ -58,12 +48,7 @@
     </layer>
   </screen>
   
-  
-  
-  
-  <!-- +++++++++++++++++++++++++++++++++++++++ -->
-  <!-- lay out the HUD screen/layers/panels -->
-  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+
   <screen id="hud" controller="mygame.StartScreen">
     <layer id="background" childLayout="center">
       <image filename="Interface/tutorial/hud-frame.png"></image>
