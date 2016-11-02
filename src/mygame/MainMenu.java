@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package mygame;
 
 import com.jme3.app.SimpleApplication;
@@ -14,7 +10,6 @@ import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializer;
 import com.jme3.niftygui.NiftyJmeDisplay;
@@ -156,7 +151,9 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
         getFlyByCamera().setEnabled(false);
         setDisplayStatView(false);
         setDisplayFps(false);
+
         inputManager.setCursorVisible(true);
+        viewPort.setBackgroundColor(ColorRGBA.White);
         cam.setParallelProjection(true);
     }
 
@@ -205,7 +202,10 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
             Node pictire = new Node("whip");
             Picture pic1;
             pic1 = new Picture(name);
-            Texture2D tex = (Texture2D) assetManager.loadTexture("/Textures/spiral.png");
+
+            Texture2D tex = (Texture2D)assetManager.loadTexture(
+                    "Textures/spiral.png");
+
             pic1.setTexture(assetManager, tex, true);
 
             pic1.setWidth(width);

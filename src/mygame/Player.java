@@ -74,7 +74,7 @@ public class Player extends AbstractControl {
         if (click_mouse){
             Node cur_node = (Node)spatial;
             Spatial child = cur_node.getChild("whip");
-            child.rotate(0, 0, 10);
+            child.rotate(0, 0, -10);
 
         }
         
