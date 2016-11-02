@@ -37,13 +37,6 @@ public class MainMenu extends SimpleApplication implements ActionListener{
         setDisplayFps(false);
         setDisplayStatView(false);
 
-//        Box b = new Box( 1, 1, 1);
-//        Geometry geom = new Geometry("Box", b);
-//        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-//        mat.setColor("Color", ColorRGBA.Blue);
-//        geom.setMaterial(mat);
-//        rootNode.attachChild(geom);
-
         startScreen = new StartScreen(this);
         stateManager.attach(startScreen);
         
@@ -54,7 +47,6 @@ public class MainMenu extends SimpleApplication implements ActionListener{
         Nifty nifty = niftyDisplay.getNifty();
         guiViewPort.addProcessor(niftyDisplay);
         nifty.fromXml("Interface/tutorial/screen3.xml", "start", startScreen);
-        //nifty.setDebugOptionPanelColors(true);
 
         flyCam.setDragToRotate(true);  
     }
@@ -134,7 +126,9 @@ public class MainMenu extends SimpleApplication implements ActionListener{
         getFlyByCamera().setEnabled(false);
         setDisplayStatView(false);
         setDisplayFps(false);
-        inputManager.setCursorVisible(false);
+        //inputManager.setCursorVisible(false);
+        viewPort.setBackgroundColor(ColorRGBA.White);
+        
         cam.setParallelProjection(true);
     }
      
@@ -171,7 +165,7 @@ public class MainMenu extends SimpleApplication implements ActionListener{
             Picture pic1;
             pic1 = new Picture(name);
             Texture2D tex = (Texture2D)assetManager.loadTexture(
-                    "/Textures/spiral.png");
+                    "Textures/spiral.png");
             pic1.setTexture(assetManager, tex, true);
 
             pic1.setWidth(width);
