@@ -10,13 +10,17 @@ import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializer;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.control.BillboardControl;
 import com.jme3.scene.shape.Box;
+import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture2D;
 import com.jme3.ui.Picture;
 import com.sun.istack.internal.NotNull;
@@ -26,12 +30,23 @@ import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MainMenu extends SimpleApplication implements ActionListener, AnalogListener {
+public class MainMenu extends SimpleApplication implements ActionListener,
+        AnalogListener{
+
 
     private StartScreen startScreen;
     private ArrayList<Callable> listEvents;
     public Spatial player;
     public Spatial player2;
+    
+    private PlayerControl player_control;
+    private int draw_flag ;
+    private Node [] node_whip;
+    private float time_simple_update = 0f;
+    private static final float WHIP_WIDTH = 60f;
+    private static final float WHIP_HEIGHT = 60f;
+    private static final float PLAYER_BODY_WIDTH = 30f;
+    private static final float PLAYER_BODY_HEIGHT = 30f;
 
     public MainMenu() {
         listEvents = new ArrayList<Callable>();
@@ -64,38 +79,38 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
     public void onAction(String name, boolean isPressed, float tpf) {
 
         if (name.equals("Rotate")) {
-            player.getControl(Player.class).rotate = isPressed;
+            player.getControl(PlayerControl.class).rotate = isPressed;
         }
 
         if (name.equals("MouseMoved")) {
-            player.getControl(Player.class).mouse_position = inputManager.getCursorPosition();
-            player.getControl(Player.class).move_mouse = isPressed;
+            player.getControl(PlayerControl.class).mouse_position = inputManager.getCursorPosition();
+            player.getControl(PlayerControl.class).move_mouse = isPressed;
         }
 
         if (name.equals("Up")) {
-            player.getControl(Player.class).up_key = isPressed;
+            player.getControl(PlayerControl.class).up_key = isPressed;
         }
 
         if (name.equals("Down")) {
-            player.getControl(Player.class).down_key = isPressed;
+            player.getControl(PlayerControl.class).down_key = isPressed;
         }
 
         if (name.equals("Left")) {
-            player.getControl(Player.class).left_key = isPressed;
+            player.getControl(PlayerControl.class).left_key = isPressed;
         }
 
         if (name.equals("Right")) {
-            player.getControl(Player.class).right_key = isPressed;
+            player.getControl(PlayerControl.class).right_key = isPressed;
         }
 
         if (name.equals("Mouse_Click_Left")) {
-            player.getControl(Player.class).click_mouse = isPressed;
+            player.getControl(PlayerControl.class).mouse_pressed = isPressed;
         }
     }
 
     public void initPlayer() {
         initCamera();
-
+        
         inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A),
                 new KeyTrigger(KeyInput.KEY_LEFT));
 
@@ -110,7 +125,8 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
 
         inputManager.addMapping("Rotate", new KeyTrigger(KeyInput.KEY_SPACE));
 
-        inputManager.addMapping("MouseMoved", new MouseAxisTrigger(MouseInput.AXIS_Y, true),
+        inputManager.addMapping("MouseMoved", new MouseAxisTrigger(
+                MouseInput.AXIS_Y, true),
                 new MouseAxisTrigger(MouseInput.AXIS_Y, false),
                 new MouseAxisTrigger(MouseInput.AXIS_X, true),
                 new MouseAxisTrigger(MouseInput.AXIS_X, false));
@@ -121,25 +137,59 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
         inputManager.addListener(this, "Left", "Right", "Rotate", "Up", "Down",
                 "MouseMoved", "Mouse_Click_Left");
 
-        player = getSpatial("Player");
-        player.setLocalTranslation(settings.getWidth() / 2, settings.getHeight() / 2, 0f);
-        player.addControl(new Player(settings.getWidth() ,settings.getHeight() ));
+        
+       player = getSpatial("Player");
 
-        player2 = getSpatial("Player");
+       player.setLocalTranslation(settings.getWidth() / 2,
+                                  settings.getHeight() / 2, 0f);
+       player_control = new PlayerControl(settings.getWidth(),
+                                          settings.getHeight(),30,30, this);
+       player.addControl(player_control);
+       player_control.setWhipStates(getNodeWhip());
+       
+       node_whip = getNodeWhip();
+       guiNode.attachChild(player);
+       guiNode.attachChild(player2);
+
+        player2 = getSpatial("PlayerControl");
         player2.setLocalTranslation(settings.getWidth() / 2, settings.getHeight() / 2, 0f);
 
 
        inputManager.addListener(this, "Left", "Right", "Rotate", "Up", "Down", 
                "MouseMoved","Mouse_Click_Left");
-       
-       player = getSpatial("Player");
-       player.setLocalTranslation(settings.getWidth() / 2, settings.getHeight() / 2, 0f);
-       player.addControl(new Player(settings.getWidth(),settings.getHeight()  ));
 
-       guiNode.attachChild(player);
-       guiNode.attachChild(player2);
+        startScreen = new StartScreen(this);
+        stateManager.attach(startScreen);
+        
+        
+        inputManager.addListener(this, "MouseMoved");
+        NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(
+                assetManager, inputManager, audioRenderer, guiViewPort);
+        Nifty nifty = niftyDisplay.getNifty();
+        guiViewPort.addProcessor(niftyDisplay);
+        nifty.fromXml("Interface/tutorial/screen3.xml", "start", startScreen);
 
+        flyCam.setDragToRotate(true);  
     }
+    @Override
+    public void onAnalog(String name, float value, float tpf) {
+        if (player!=null){
+            if (name.equals("MouseMoved")) {
+                player.getControl(PlayerControl.class).mouse_position =
+                        inputManager.getCursorPosition();
+                player.getControl(PlayerControl.class).move_mouse = true;
+            }
+        }
+        
+        if (startScreen.client != null) {
+            startScreen.client.send(getProtocolMessage());
+        }
+
+        if (startScreen.server != null) {
+            startScreen.server.broadcast(getProtocolMessage());
+        }
+    }
+   
 
     @Override
     public void simpleUpdate(float tpf) {
@@ -153,6 +203,34 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
                 listEvents.clear();
             }
         }
+        
+        time_simple_update += tpf;
+
+        if (draw_flag == 1 && time_simple_update > 0.15f){
+            Node cur = (Node)player;
+            cur.detachChildNamed(node_whip[1].getName());
+            cur.attachChild(node_whip[2]);
+            draw_flag = 2;
+            time_simple_update = 0;
+            return;
+        }
+
+        if (draw_flag == 2 && time_simple_update > 0.15f) {
+            Node playerNode = (Node)player;
+            playerNode.detachChildNamed(node_whip[2].getName());
+            playerNode.attachChild(node_whip[3]);
+            time_simple_update = 0;
+            draw_flag = 3;
+            return;
+        }
+        
+        if (draw_flag == 3 && time_simple_update > 0.1f) {
+            Node playerNode = (Node)player;
+            playerNode.detachChildNamed(node_whip[3].getName());
+            node_whip[0].setLocalRotation(Matrix3f.IDENTITY);
+            playerNode.attachChild(node_whip[0]);
+            time_simple_update = 0;
+        }
     }
 
     private void initCamera() {
@@ -160,93 +238,68 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
         getFlyByCamera().setEnabled(false);
         setDisplayStatView(false);
         setDisplayFps(false);
-
-        inputManager.setCursorVisible(true);
         viewPort.setBackgroundColor(ColorRGBA.White);
         cam.setParallelProjection(true);
     }
+     
+     
+     
+     private Spatial getSpatial(String name) {
+        if (name.equals("Player")){
+            Node node = new Node("Player");
+            
+            Material mat_body = new Material(assetManager,
+                    "Common/MatDefs/Misc/Unshaded.j3md");
+            mat_body.setColor("Color", ColorRGBA.Blue);
+            Material mat_head = new Material(assetManager,
+                    "Common/MatDefs/Misc/Unshaded.j3md");
+            mat_head.setColor("Color", ColorRGBA.Red);
+            
+            node.setUserData("width", PLAYER_BODY_WIDTH);
+            node.setUserData("height", PLAYER_BODY_HEIGHT);
+            
+            Geometry body = new Geometry("body", 
+                                         new Box(PLAYER_BODY_WIDTH, 
+                                                 PLAYER_BODY_HEIGHT, 0));
+            body.setMaterial(mat_body);
 
-    public void updateState(@NotNull final ProtocolMessage message) {
+            Geometry head = new Geometry("head",
+                            new Box(PLAYER_BODY_WIDTH / 4f, 
+                                    PLAYER_BODY_HEIGHT / 4f, 0));
+            head.setMaterial(mat_head);
+            head.setLocalTranslation(PLAYER_BODY_WIDTH, 0, 0);
 
-        synchronized (this) {
-            listEvents.add(new Callable() {
-                public Object call() throws Exception {
-                    if (message.entries.isEmpty()) {
-                        throw new Exception("Invalid protocol message size");
-                    }
-                    player2.setLocalTranslation(message.entries.get(0).x, message.entries.get(0).y, 0);
-                    player2.setLocalRotation(message.entries.get(0).rotation);
-                    return null;
-                }
-            });
-        }
-
-    }
-
-    private Spatial getSpatial(String name) {
-        if (name.equals("Player")) {
-            Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            mat.setColor("Color", ColorRGBA.Blue);
-
-            Node node = new Node(name);
-            node.setMaterial(mat);
-
-            Picture pic;
-
-            pic = new Picture(name);
-            pic.setMaterial(mat);
-            float width = 50;
-            float height = 50;
-            pic.setWidth(width);
-            pic.setHeight(height);
-            pic.move(-width / 2f, -height / 2f, 0);
-
-            Box box1 = new Box(5, 5, 0);
-            Geometry blue = new Geometry(name, box1);
-            Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            mat1.setColor("Color", ColorRGBA.Red);
-            blue.setMaterial(mat1);
-
-            blue.move(0 , -height / 2f, 0);
-
-            Node pictire = new Node("whip");
-            Picture pic1;
-            pic1 = new Picture(name);
-
+            Picture whip_spin_pic = new Picture("whip_spin_state");
             Texture2D tex = (Texture2D)assetManager.loadTexture(
                     "Textures/spiral.png");
+            whip_spin_pic.setTexture(assetManager, tex, true);
+            whip_spin_pic.setLocalTranslation(PLAYER_BODY_WIDTH, -PLAYER_BODY_HEIGHT, 0);
+            whip_spin_pic.rotate(0, 0, FastMath.HALF_PI);
+            whip_spin_pic.setWidth(WHIP_WIDTH);
+            whip_spin_pic.setHeight(WHIP_HEIGHT);
 
-            pic1.setTexture(assetManager, tex, true);
+            //whip_spin_pic.move(WHIP_WIDTH, WHIP_HEIGHT, 0);
+//            Geometry healthbar = new Geometry("healthbar", new Quad(4f, 0.2f));
+//            Material mathb = mat.clone();
+//            mathb.setColor("Color", ColorRGBA.Red);
+//            healthbar.setMaterial(mathb);
+//            healthbar.center();
+//            healthbar.move(0, 7, 2);
+//            healthbar.addControl(billboard);
 
-            pic1.setWidth(width);
-            pic1.setHeight(height);
-
-            pic1.move(-width/2f + 30, -height/2f + 50, 0);
+            //node.attachChild(healthbar);
             
-            pictire.attachChild(pic1);
-
-            node.attachChild(pictire);
-            node.attachChild(pic);
-
-            node.attachChild(blue);
+            node.attachChild(body);
+            node.attachChild(head);
+            node.attachChild(whip_spin_pic);
 
             return node;
         }
         return null;
     }
 
-    @Override
-    public void onAnalog(String name, float value, float tpf) {
 
-        if (startScreen.client != null) {
-            startScreen.client.send(getProtocolMessage());
-        }
 
-        if (startScreen.server != null) {
-            startScreen.server.broadcast(getProtocolMessage());
-        }
-        
-    }
 
     private ProtocolMessage getProtocolMessage() {
         ProtocolMessage protocolMessage = new ProtocolMessage();
@@ -257,4 +310,61 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
         protocolMessage.addEntry(entry);
         return protocolMessage;
     }
+
+     
+     
+     
+     private Node[] getNodeWhip() {
+        Node[] whip_hit = new Node[4];
+        whip_hit[0] = new Node("whip_spin_state");
+        whip_hit[1] = new Node("whip_hit_state1");
+        whip_hit[2] = new Node("whip_hit_state2");
+        whip_hit[3] = new Node("whip_hit_state3");
+
+        Picture whip_hit_pic = new Picture("whip_spin_state");
+        Texture2D tex = (Texture2D)assetManager.loadTexture("Textures/spiral.png");
+        whip_hit_pic.setTexture(assetManager, tex, true);
+        whip_hit_pic.setWidth(WHIP_WIDTH);
+        whip_hit_pic.setHeight(WHIP_HEIGHT);
+        whip_hit_pic.rotate(0, 0, FastMath.HALF_PI);
+        whip_hit[0].setLocalTranslation(PLAYER_BODY_WIDTH, -PLAYER_BODY_HEIGHT, 0);
+        whip_hit[0].attachChild(whip_hit_pic);
+
+        Picture whip_hit_pic1 = new Picture("whip_hit_state1");
+        tex = (Texture2D)assetManager.loadTexture("Textures/whip_hit1.png");
+        whip_hit_pic1.setTexture(assetManager, tex, true);
+        whip_hit_pic1.setWidth(WHIP_WIDTH * 4f);
+        whip_hit_pic1.setHeight(WHIP_HEIGHT * 4f);
+        whip_hit_pic1.move(0, WHIP_HEIGHT * 2f, 0);
+        whip_hit_pic1.rotate(0, 0, -FastMath.HALF_PI);
+        whip_hit[1].attachChild(whip_hit_pic1);
+
+        Picture whip_hit_pic2 = new Picture("whip_hit_state2");
+        tex = (Texture2D)assetManager.loadTexture("Textures/whip_hit3.png");
+        whip_hit_pic2.setTexture(assetManager, tex, true);
+        whip_hit_pic2.setWidth(WHIP_WIDTH * 4f);
+        whip_hit_pic2.setHeight(WHIP_HEIGHT * 4f);
+        whip_hit_pic2.move(0, WHIP_HEIGHT * 2f, 0);
+        whip_hit_pic2.rotate(0, 0, -FastMath.HALF_PI);
+        whip_hit[2].attachChild(whip_hit_pic2);
+        
+        Picture whip_hit_pic3 = new Picture("whip_hit_state2");
+        tex = (Texture2D)assetManager.loadTexture("Textures/whip_hit2.png");
+        whip_hit_pic3.setTexture(assetManager, tex, true);
+        whip_hit_pic3.setWidth(WHIP_WIDTH * 4f);
+        whip_hit_pic3.setHeight(WHIP_HEIGHT * 4f);
+        whip_hit_pic3.move(0, WHIP_HEIGHT * 2f, 0);
+        whip_hit_pic3.rotate(0, 0, -FastMath.HALF_PI);
+        whip_hit[3].attachChild(whip_hit_pic3);
+
+        return whip_hit;
+    }
+
+    public void drawWhip() {
+        draw_flag = 1;
+        Node playerNode = (Node)player;
+        playerNode.detachChildNamed("whip_spin_state");
+        playerNode.attachChild(node_whip[1]);
+    }
+
 }

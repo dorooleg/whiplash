@@ -15,7 +15,6 @@ import de.lessvoid.nifty.screen.ScreenController;
 import java.io.IOException;
 
 public class StartScreen extends AbstractAppState implements ScreenController {
-
     private Nifty nifty;
     private Application app;
     private Screen screen;

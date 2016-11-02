@@ -158,22 +158,7 @@
   </screen>
   
   <screen id="game" controller="mygame.StartScreen">
-    <layer id="background" childLayout="center">
-      <image filename="Interface/tutorial/hud-frame.png"></image>
-    </layer>
-    <layer id="foreground" childLayout="horizontal">
-      <panel id="panel_left" width="80%" height="100%" childLayout="vertical" >  
-        <!-- spacer -->
-      </panel>
-      <panel id="panel_right" width="20%" height="100%" childLayout="vertical" >  
-        <panel id="panel_top_right1" width="100%" height="15%" childLayout="center" >  
-          <control name="label" id="score" color="#000" text="123" width="100%" height="100%" />
-        </panel>
-        
-        <panel id="panel_bot_right" width="100%" height="70%" valign="center" >  
-        </panel>
-      </panel>
-    </layer>
+    <layer id="background" childLayout="center"/>
   </screen>
 
 
