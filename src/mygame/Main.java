@@ -7,7 +7,8 @@ public class Main {
 
   public static void main(String[] args) {
         AppSettings settings = new AppSettings(true);
-        settings.setResolution(640, 640);
+        //settings.setFullscreen(true);
+        settings.setResolution(960,720);
         MainMenu app = new MainMenu();
         app.setShowSettings(false);
         app.setSettings(settings);

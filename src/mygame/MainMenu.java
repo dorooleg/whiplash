@@ -28,7 +28,9 @@ import de.lessvoid.nifty.Nifty;
  * @author user
  */
 public class MainMenu extends SimpleApplication implements ActionListener{
-
+  public static String getPlayerName() {
+    return new String("Oleg");
+  }
     private int health;
     private StartScreen startScreen;
   
