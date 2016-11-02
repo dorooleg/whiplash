@@ -278,16 +278,19 @@ public class MainMenu extends SimpleApplication implements ActionListener,
             whip_spin_pic.setWidth(WHIP_WIDTH);
             whip_spin_pic.setHeight(WHIP_HEIGHT);
 
-            //whip_spin_pic.move(WHIP_WIDTH, WHIP_HEIGHT, 0);
-//            Geometry healthbar = new Geometry("healthbar", new Quad(4f, 0.2f));
-//            Material mathb = mat.clone();
-//            mathb.setColor("Color", ColorRGBA.Red);
-//            healthbar.setMaterial(mathb);
-//            healthbar.center();
-//            healthbar.move(0, 7, 2);
-//            healthbar.addControl(billboard);
+            whip_spin_pic.move(WHIP_WIDTH, WHIP_HEIGHT, 0);
+            
+            BillboardControl billboard = new BillboardControl();
+            Geometry healthbar = new Geometry("healthbar", new Quad(4f, 0.2f));
+            Material mathb = new Material(assetManager,
+                    "Common/MatDefs/Misc/Unshaded.j3md");
+            mathb.setColor("Color", ColorRGBA.Red);
+            healthbar.setMaterial(mathb);
+            healthbar.center();
+            healthbar.move(0, 7, 2);
+            healthbar.addControl(billboard);
 
-            //node.attachChild(healthbar);
+            node.attachChild(healthbar);
             
             node.attachChild(body);
             node.attachChild(head);
