@@ -123,13 +123,22 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
 
         player = getSpatial("Player");
         player.setLocalTranslation(settings.getWidth() / 2, settings.getHeight() / 2, 0f);
-        player.addControl(new Player());
+        player.addControl(new Player(settings.getWidth() ,settings.getHeight() ));
 
         player2 = getSpatial("Player");
         player2.setLocalTranslation(settings.getWidth() / 2, settings.getHeight() / 2, 0f);
 
-        guiNode.attachChild(player);
-        guiNode.attachChild(player2);
+
+       inputManager.addListener(this, "Left", "Right", "Rotate", "Up", "Down", 
+               "MouseMoved","Mouse_Click_Left");
+       
+       player = getSpatial("Player");
+       player.setLocalTranslation(settings.getWidth() / 2, settings.getHeight() / 2, 0f);
+       player.addControl(new Player(settings.getWidth(),settings.getHeight()  ));
+
+       guiNode.attachChild(player);
+       guiNode.attachChild(player2);
+
     }
 
     @Override
@@ -211,8 +220,9 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
 
             pic1.setWidth(width);
             pic1.setHeight(height);
-            pic1.move(-width / 2f - 50, -height / 2f, 0);
 
+            pic1.move(-width/2f + 30, -height/2f + 50, 0);
+            
             pictire.attachChild(pic1);
 
             node.attachChild(pictire);
