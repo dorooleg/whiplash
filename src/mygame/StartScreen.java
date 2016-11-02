@@ -37,9 +37,11 @@ public class StartScreen extends AbstractAppState implements ScreenController {
         System.out.println("server");
         nifty.gotoScreen("server");
         owner.initPlayer();
+        System.out.println("server nachalo");
         while (!server.hasConnections()) {
             Thread.sleep(1000);
         }
+        System.out.println("server conec");
     }
     
     public void startClient() throws IOException {

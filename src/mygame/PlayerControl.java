@@ -118,15 +118,6 @@ public class PlayerControl extends AbstractControl {
             mouse_was_pressed = true;
         }
         if (mouse_was_pressed && !mouse_pressed){
-//            System.err.println("sha bang");
-//            Node cur_node = (Node)spatial;
-//            cur_node.detachChildNamed("whip_spin_state");
-//            if (whipStates!=null){
-//                cur_node.attachChild(whipStates[1]);
-//            }
-//            cur_node.detachChildNamed(whipStates[1].getName());
-//            cur_node.attachChild(whipStates[0]);
-            
             owner.drawWhip();
             mouse_was_pressed = false;
         }

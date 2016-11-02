@@ -42,6 +42,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
     private PlayerControl player_control;
     private int draw_flag ;
     private Node [] node_whip;
+    
     private float time_simple_update = 0f;
     private static final float WHIP_WIDTH = 60f;
     private static final float WHIP_HEIGHT = 60f;
@@ -146,30 +147,13 @@ public class MainMenu extends SimpleApplication implements ActionListener,
                                           settings.getHeight(),30,30, this);
        player.addControl(player_control);
        player_control.setWhipStates(getNodeWhip());
+       //
+       player2 = getSpatial("Player");
+       player2.setLocalTranslation(settings.getWidth() / 2, settings.getHeight() / 2, 0f);
        
        node_whip = getNodeWhip();
        guiNode.attachChild(player);
        guiNode.attachChild(player2);
-
-        player2 = getSpatial("PlayerControl");
-        player2.setLocalTranslation(settings.getWidth() / 2, settings.getHeight() / 2, 0f);
-
-
-       inputManager.addListener(this, "Left", "Right", "Rotate", "Up", "Down", 
-               "MouseMoved","Mouse_Click_Left");
-
-        startScreen = new StartScreen(this);
-        stateManager.attach(startScreen);
-        
-        
-        inputManager.addListener(this, "MouseMoved");
-        NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(
-                assetManager, inputManager, audioRenderer, guiViewPort);
-        Nifty nifty = niftyDisplay.getNifty();
-        guiViewPort.addProcessor(niftyDisplay);
-        nifty.fromXml("Interface/tutorial/screen3.xml", "start", startScreen);
-
-        flyCam.setDragToRotate(true);  
     }
     @Override
     public void onAnalog(String name, float value, float tpf) {
@@ -189,7 +173,22 @@ public class MainMenu extends SimpleApplication implements ActionListener,
             startScreen.server.broadcast(getProtocolMessage());
         }
     }
-   
+    public void updateState(@NotNull final ProtocolMessage message) {
+
+         synchronized (this) {
+             listEvents.add(new Callable() {
+                 public Object call() throws Exception {
+                     if (message.entries.isEmpty()) {
+                         throw new Exception("Invalid protocol message size");
+                     }
+                     player2.setLocalTranslation(message.entries.get(0).x, message.entries.get(0).y, 0);
+                     player2.setLocalRotation(message.entries.get(0).rotation);
+                     return null;
+                 }
+             });
+         }
+
+    }
 
     @Override
     public void simpleUpdate(float tpf) {
@@ -273,12 +272,10 @@ public class MainMenu extends SimpleApplication implements ActionListener,
             Texture2D tex = (Texture2D)assetManager.loadTexture(
                     "Textures/spiral.png");
             whip_spin_pic.setTexture(assetManager, tex, true);
-            whip_spin_pic.setLocalTranslation(PLAYER_BODY_WIDTH, -PLAYER_BODY_HEIGHT, 0);
-            whip_spin_pic.rotate(0, 0, FastMath.HALF_PI);
             whip_spin_pic.setWidth(WHIP_WIDTH);
             whip_spin_pic.setHeight(WHIP_HEIGHT);
-
-            whip_spin_pic.move(WHIP_WIDTH, WHIP_HEIGHT, 0);
+            whip_spin_pic.setLocalTranslation(PLAYER_BODY_WIDTH, -PLAYER_BODY_HEIGHT, 0);
+            whip_spin_pic.rotate(0, 0, FastMath.HALF_PI);
             
             BillboardControl billboard = new BillboardControl();
             Geometry healthbar = new Geometry("healthbar", new Quad(4f, 0.2f));
