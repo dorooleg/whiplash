@@ -28,7 +28,7 @@ public class Player extends AbstractControl {
     public Player() {
         mouse_position = new Vector2f(0, 0);
 
-        trans = 0f;
+        trans = FastMath.PI/2;
     }
 
     @Override

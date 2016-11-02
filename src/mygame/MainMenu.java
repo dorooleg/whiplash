@@ -158,7 +158,7 @@ public class MainMenu extends SimpleApplication implements ActionListener{
             Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
             mat1.setColor("Color", ColorRGBA.Red);
             blue.setMaterial(mat1);
-            blue.move(-width / 2f , 0, 0);
+            blue.move(0 , -height / 2f, 0);
 
          
             Node pictire = new Node("whip");
