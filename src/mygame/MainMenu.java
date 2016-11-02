@@ -8,12 +8,14 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.network.serializing.Serializer;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -21,13 +23,19 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.texture.Texture2D;
 import com.jme3.ui.Picture;
+import com.sun.istack.internal.NotNull;
 import de.lessvoid.nifty.Nifty;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author user
  */
-public class MainMenu extends SimpleApplication implements ActionListener{
+public class MainMenu extends SimpleApplication implements ActionListener, AnalogListener {
 
     private int health;
     private StartScreen startScreen;
@@ -36,6 +44,7 @@ public class MainMenu extends SimpleApplication implements ActionListener{
     public void simpleInitApp() {
         setDisplayFps(false);
         setDisplayStatView(false);
+        setPauseOnLostFocus(false);
 
 //        Box b = new Box( 1, 1, 1);
 //        Geometry geom = new Geometry("Box", b);
@@ -57,13 +66,15 @@ public class MainMenu extends SimpleApplication implements ActionListener{
         //nifty.setDebugOptionPanelColors(true);
 
         flyCam.setDragToRotate(true);  
+        Serializer.registerClass(ProtocolMessage.class);
+        Serializer.registerClass(ProtocolMessage.Entry.class);
     }
     
     public int a = 0  ;
     
     @Override
     public void onAction(String name, boolean isPressed, float tpf) {
-       
+        
         if (name.equals("Rotate")) {
             player.getControl(Player.class).rotate = isPressed;
         }
@@ -88,9 +99,14 @@ public class MainMenu extends SimpleApplication implements ActionListener{
         if (name.equals("Mouse_Click_Left")){
             player.getControl(Player.class).click_mouse = isPressed;
         }
+        
+
     }
     
-    Spatial player;
+
+    
+    public Spatial player;
+    public Spatial player2;
     
     public void init_player(){
        initCamera();
@@ -125,19 +141,52 @@ public class MainMenu extends SimpleApplication implements ActionListener{
        player = getSpatial("Player");
        player.setLocalTranslation(settings.getWidth() / 2, settings.getHeight() / 2, 0f);
        player.addControl(new Player());
+       player2 = getSpatial("Player");
+       player2.setLocalTranslation(settings.getWidth() / 2, settings.getHeight() / 2, 0f);
 //
 //
        guiNode.attachChild(player);
+       guiNode.attachChild(player2);
     }
+    
+    @Override
+    public void simpleUpdate(float tpf) {
+        if (!list.isEmpty()) {
+            try {
+                list.listIterator().next().call();
+            } catch (Exception ex) {
+                Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            list.clear();
+        }
+    }
+    
      private void initCamera() {
         cam.setLocation(new Vector3f(0.0f, 0.0f, 0.5f));
         getFlyByCamera().setEnabled(false);
         setDisplayStatView(false);
         setDisplayFps(false);
-        inputManager.setCursorVisible(false);
+        inputManager.setCursorVisible(true);
         cam.setParallelProjection(true);
     }
      
+
+     ArrayList<Callable> list = new ArrayList<Callable>();
+     public void updateState(@NotNull final ProtocolMessage message) {
+
+         synchronized(this) {
+            list.add(new Callable() {
+
+             public Object call() throws Exception {
+                    player2.setLocalTranslation(message.entries.get(0).x, message.entries.get(0).y, 0);
+                    player2.setLocalRotation(message.entries.get(0).rotation);
+               //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                 return null;
+             }   
+            });
+         }
+     }
      
      
      private Spatial getSpatial(String name) {
@@ -188,6 +237,31 @@ public class MainMenu extends SimpleApplication implements ActionListener{
             return node;
         }
         return null;
+    }
+
+     @Override
+    public void onAnalog(String name, float value, float tpf) {
+         
+        if (startScreen.client != null) {
+            ProtocolMessage protocolMessage = new ProtocolMessage();
+            ProtocolMessage.Entry entry = new ProtocolMessage.Entry();
+            entry.rotation = player.getLocalRotation();
+            entry.x = player.getLocalTranslation().x;
+            entry.y = player.getLocalTranslation().y;
+            protocolMessage.addEntry(entry);
+            startScreen.client.send(protocolMessage);
+        }
+        
+        if (startScreen.server != null) {
+            ProtocolMessage protocolMessage = new ProtocolMessage();
+            ProtocolMessage.Entry entry = new ProtocolMessage.Entry();
+            entry.rotation = player.getLocalRotation();
+            entry.x = player.getLocalTranslation().x;
+            entry.y = player.getLocalTranslation().y;
+            protocolMessage.addEntry(entry);
+            startScreen.server.broadcast(protocolMessage);
+        }
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
