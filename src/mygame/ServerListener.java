@@ -20,9 +20,6 @@ public class ServerListener implements MessageListener<HostedConnection> {
     public void messageReceived(HostedConnection source, Message message) {
         if (message instanceof ProtocolMessage) {
             mainMenu.updateState((ProtocolMessage)message);
-            // do something with the message
-            ProtocolMessage helloMessage = (ProtocolMessage) message;
-            System.out.println("Server received" +helloMessage.toString() +"' from client #"+source.getId() );
-        } // else....
+        }
     }
 }

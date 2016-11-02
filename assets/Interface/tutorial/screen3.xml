@@ -23,13 +23,14 @@
         <panel id="panel_bottom_left" height="50%" width="100%" valign="center" childLayout="center">  
           <control name="button" label="Start"  id="StartButton" align="center" valign="center" 
                    visibleToMouse="true"> 
-            <interact onClick="startGame(hud)" />
+            <interact onClick="start(hud)" />
+
           </control>
         </panel>
         <panel id="panel_bottom_left" height="50%" width="100%" valign="center" childLayout="center">  
-          <control name="button" label="Server" id="StartButton" align="center" valign="center" 
+          <control name="button" label="Optinal" id="StartButton" align="center" valign="center" 
                    visibleToMouse="true"> 
-            <interact onClick="startServer()" />
+            <interact onClick="start(hud2)" />
           </control>
         </panel>
         <panel id="panel_bottom_left" height="50%" width="100%" valign="center" childLayout="center">  
@@ -48,8 +49,115 @@
     </layer>
   </screen>
   
-
+  
+  
   <screen id="hud" controller="mygame.StartScreen">
+      <layer id="background" childLayout="center">
+        <image filename="Interface/tutorial/start-background.png" 
+             align="center" 
+             width="100%" height="100%">
+        </image>
+      </layer>
+    <layer id="foreground" childLayout="horizontal">
+
+      <panel id="panel_bottom" height="25%" width="100%" align="center" childLayout="vertical" >  
+        <panel id="panel_bottom_left" height="150%" width="100%" valign="center" childLayout="center">  
+          
+        </panel>
+        <panel id="panel_bottom_left" height="50%" width="100%" valign="center" childLayout="center">  
+          <control name="button" label="Server" id="StartButton" align="center" valign="center" 
+                   visibleToMouse="true"> 
+            <interact onClick="startServer()" />
+          </control>
+        </panel>
+        <panel id="panel_bottom_left" height="10%" width="100%" valign="center" childLayout="center">  
+          <control name="button" label="Client" id="StartButton" align="center" valign="center" 
+                   visibleToMouse="true"> 
+            <interact onClick="startClient()" />
+          </control>
+<!--          <control name="textfield" maxLength="20" width="10%" id="ip_txt" align="center" valign="center" 
+                   visibleToMouse="true"> 
+            
+          </control>-->
+        </panel>
+        <panel id="panel_bottom_left" height="50%" width="100%" valign="center" childLayout="center">  
+          <control name="button" label="Return" id="StartButton" align="center" valign="center" 
+                   visibleToMouse="true"> 
+            <interact onClick="start(start)" />
+          </control>
+        </panel>
+        
+      </panel>
+    </layer>
+  </screen>
+  
+    <screen id="hud2" controller="mygame.StartScreen">
+    <layer id="background" childLayout="center">
+      <image filename="Interface/tutorial/start-background.png" 
+             align="center" 
+             width="100%" height="100%">
+      </image>
+    </layer>
+    <layer id="foreground" childLayout="horizontal">
+
+      <panel id="panel_bottom" height="25%" width="100%" align="center" childLayout="vertical" >  
+        <panel id="panel_bottom_left" height="150%" width="100%" valign="center" childLayout="center">  
+          
+        </panel>
+        
+        <panel id="panel_mid" height="15%" width="100%" align="center" childLayout="center">       
+          <text text="Well come to Whiplash. " 
+          font="Interface/Fonts/Default.fnt" width="50%" height="50%" wrap="true" />
+        </panel>
+        <panel id="panel_bottom_left" height="60%" width="100%" valign="center" childLayout="center">  
+          <control name="button" label="Return" id="StartButton" align="center" valign="center" 
+                   visibleToMouse="true"> 
+            <interact onClick="start(start)" />
+          </control>
+        </panel>
+        
+      </panel>
+    </layer>
+  </screen>
+  
+    <screen id="ip" controller="mygame.StartScreen">
+    <layer id="background" childLayout="center">
+      <image filename="Interface/tutorial/start-background.png" 
+             align="center" 
+             width="100%" height="100%">
+      </image>
+    </layer>
+    <layer id="foreground" childLayout="horizontal">
+
+      <panel id="panel_bottom" height="25%" width="100%" align="center" childLayout="vertical" >  
+        <panel id="panel_bottom_left" height="150%" width="100%" valign="center" childLayout="center">  
+          
+        </panel>
+        
+        <panel id="panel_mid" height="15%" width="100%" align="center" childLayout="center">       
+          <text text="Please Press Your ip-adress: " 
+          font="Interface/Fonts/Default.fnt" width="50%" height="50%" wrap="true" />
+        </panel>
+        <panel id="panel_bottom_left" height="10%" width="100%" valign="center" childLayout="center">           
+          <control name="textfield" maxLength="20" width="10%" id="ip_txt" align="center" valign="center" 
+                   visibleToMouse="true">            
+          </control>
+        </panel> 
+        <panel id="panel_bottom_left" height="60%" width="100%" valign="center" childLayout="center">  
+          <control name="button" label="OK" id="StartButton" align="center" valign="center" 
+                   visibleToMouse="true"> 
+            <interact onClick="startGame(game)" />
+          </control>
+        </panel> 
+        <panel id="panel_mid" height="15%" width="100%" align="center" childLayout="center">       
+          <text text="${CALL.getPlayerName()}" 
+          font="Interface/Fonts/Default.fnt" width="50%" height="50%" wrap="true" />
+        </panel>      
+      </panel>
+    </layer>
+  </screen>
+  
+  <screen id="game" controller="mygame.StartScreen">
     <layer id="background" childLayout="center">
       <image filename="Interface/tutorial/hud-frame.png"></image>
     </layer>
@@ -59,16 +167,15 @@
       </panel>
       <panel id="panel_right" width="20%" height="100%" childLayout="vertical" >  
         <panel id="panel_top_right1" width="100%" height="15%" childLayout="center" >  
-          <control name="label" id="score" color="#000" text="223" width="100%" height="100%" />
+          <control name="label" id="score" color="#000" text="123" width="100%" height="100%" />
         </panel>
-        <panel id="panel_top_right2" width="100%" height="15%" childLayout="center" >  
-          <image filename="Interface/tutorial/face1.png" id="playerhealth"
-                valign="center" align="center" height="50%" width="30%" >
-          </image>
-        </panel>
+        
         <panel id="panel_bot_right" width="100%" height="70%" valign="center" >  
         </panel>
       </panel>
     </layer>
   </screen>
+
+
+  
 </nifty>

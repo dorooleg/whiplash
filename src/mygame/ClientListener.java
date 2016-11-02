@@ -24,9 +24,6 @@ public class ClientListener implements MessageListener<Client> {
   public void messageReceived(Client source, Message message) {
     if (message instanceof ProtocolMessage) {
       mainMenu.updateState((ProtocolMessage)message);
-      // do something with the message
-      ProtocolMessage protocolMessage = (ProtocolMessage) message;
-      System.out.println("Client #" + source.getId() + " received: '" + protocolMessage.toString() + "'");
-    } // else...
+    }
   }
 }
