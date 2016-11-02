@@ -116,7 +116,7 @@ public class MainMenu extends SimpleApplication implements ActionListener{
        
        player = getSpatial("Player");
        player.setLocalTranslation(settings.getWidth() / 2, settings.getHeight() / 2, 0f);
-       player.addControl(new Player());
+       player.addControl(new Player(settings.getWidth(),settings.getHeight()  ));
 //
 //
        guiNode.attachChild(player);
@@ -159,7 +159,6 @@ public class MainMenu extends SimpleApplication implements ActionListener{
             mat1.setColor("Color", ColorRGBA.Red);
             blue.setMaterial(mat1);
             blue.move(0 , -height / 2f, 0);
-
          
             Node pictire = new Node("whip");
             Picture pic1;
@@ -170,7 +169,7 @@ public class MainMenu extends SimpleApplication implements ActionListener{
 
             pic1.setWidth(width);
             pic1.setHeight(height);
-            pic1.move(-width/2f - 50, -height/2f, 0);
+            pic1.move(-width/2f + 30, -height/2f + 50, 0);
             
             pictire.attachChild(pic1);
          

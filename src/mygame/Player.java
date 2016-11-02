@@ -25,7 +25,12 @@ public class Player extends AbstractControl {
     public Vector2f mouse_position;
     public float trans;
 
-    public Player() {
+    private int widht;
+    private int height;
+    
+    public Player(int w, int h) {
+        widht = w;
+        height = h;
         mouse_position = new Vector2f(0, 0);
 
         trans = FastMath.PI/2;
@@ -57,16 +62,26 @@ public class Player extends AbstractControl {
         }
 
         if (left_key) {
-            spatial.move(-tpf * speed, 0, 0);
+            Vector3f local_position = spatial.getLocalTranslation();
+            if (local_position.x > 30)
+                spatial.move(-tpf * speed, 0, 0);
         }
         if (right_key) {
-            spatial.move(tpf * speed, 0, 0);
+            Vector3f local_position = spatial.getLocalTranslation();
+            if (local_position.x < widht - 30)
+                spatial.move(tpf * speed, 0, 0);
         }
         if (up_key) {
-            spatial.move(0, tpf * speed, 0);
+            
+            Vector3f local_position = spatial.getLocalTranslation();
+            System.out.println(local_position);
+            if (local_position.y  < height - 30)
+                spatial.move(0, tpf * speed, 0);
         }
         if (down_key) {
-            spatial.move(0, -tpf * speed, 0);
+            Vector3f local_position = spatial.getLocalTranslation();
+            if (local_position.y >30)
+                spatial.move(0, -tpf * speed, 0);
 
         }
         
