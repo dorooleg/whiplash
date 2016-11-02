@@ -163,7 +163,6 @@
     </layer>
     <layer id="foreground" childLayout="horizontal">
       <panel id="panel_left" width="80%" height="100%" childLayout="vertical" >  
-        <!-- spacer -->
       </panel>
       <panel id="panel_right" width="20%" height="100%" childLayout="vertical" >  
         <panel id="panel_top_right1" width="100%" height="15%" childLayout="center" >  
