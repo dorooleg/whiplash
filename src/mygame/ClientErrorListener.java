@@ -5,6 +5,7 @@
 package mygame;
 
 import com.jme3.network.ErrorListener;
+import com.sun.istack.internal.NotNull;
 
 /**
  *
@@ -12,7 +13,14 @@ import com.jme3.network.ErrorListener;
  */
 public class ClientErrorListener implements ErrorListener {
 
-    public void handleError(Object source, Throwable t) {
+    private StartScreen screen = null;
+
+    public ClientErrorListener(@NotNull StartScreen screen) {
+        this.screen = screen;
     }
-    
+
+    public void handleError(Object source, Throwable t) {
+        screen.clean();
+        screen.clearPlayers();
+    }
 }
