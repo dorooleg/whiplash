@@ -63,6 +63,8 @@ public class MainMenu extends SimpleApplication implements ActionListener,
 
         inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
         inputManager.addMapping("Escape", new KeyTrigger(KeyInput.KEY_ESCAPE));
+        
+        inputManager.addListener(this, "Escape");
 
         startScreen = new StartScreen(this);
         stateManager.attach(startScreen);
