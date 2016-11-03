@@ -50,9 +50,13 @@ public class MainMenu extends SimpleApplication implements ActionListener,
     private static final float WHIP_HEIGHT = 60f;
     private static final float PLAYER_BODY_WIDTH = 30f;
     private static final float PLAYER_BODY_HEIGHT = 30f;
+    private ColorRGBA colorPlayer;
+    private ColorRGBA colorPlayer2;
 
     public MainMenu() {
         listEvents = new ArrayList<Callable>();
+        colorPlayer = ColorRGBA.Red;
+        colorPlayer2 = ColorRGBA.Green;
     }
 
     @Override
@@ -63,7 +67,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
 
         inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
         inputManager.addMapping("Escape", new KeyTrigger(KeyInput.KEY_ESCAPE));
-        
+
         inputManager.addListener(this, "Escape");
 
         startScreen = new StartScreen(this);
@@ -88,6 +92,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
 
         if (name.equals("Escape")) {
             startScreen.clean();
+            startScreen.clearPlayers();
             startScreen.start("start");
         }
 
@@ -131,7 +136,13 @@ public class MainMenu extends SimpleApplication implements ActionListener,
     }
 
     public void initPlayer(String name_player) {
-
+        if (startScreen.server != null) {
+            colorPlayer = ColorRGBA.Red;
+            colorPlayer2 = ColorRGBA.Green;
+        } else {
+            colorPlayer2 = ColorRGBA.Red;
+            colorPlayer = ColorRGBA.Green;
+        }
         initCamera();
 
         inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A),
@@ -195,9 +206,8 @@ public class MainMenu extends SimpleApplication implements ActionListener,
         guiNode.attachChild(player);
         guiNode.attachChild(player2);
     }
-    
-    void clearPlayers()
-    {
+
+    void clearPlayers() {
         guiNode.detachAllChildren();
     }
 
@@ -240,6 +250,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
 
                     player2.getControl(PlayerControl.class).mouse_pressed =
                             message.entries.get(0).whip_heat;
+                    colorPlayer2 = message.entries.get(0).color;
 
                     return null;
                 }
@@ -327,56 +338,111 @@ public class MainMenu extends SimpleApplication implements ActionListener,
     }
 
     private Spatial getSpatial(String name) {
-        Node node = new Node(name);
+        if (name.equals("player1") || name.equals("player")) {
+            Node node = new Node(name);
 
-        Material mat_body = new Material(assetManager,
-                "Common/MatDefs/Misc/Unshaded.j3md");
-        mat_body.setColor("Color", ColorRGBA.Blue);
-        Material mat_head = new Material(assetManager,
-                "Common/MatDefs/Misc/Unshaded.j3md");
-        mat_head.setColor("Color", ColorRGBA.Red);
+            Material mat_body = new Material(assetManager,
+                    "Common/MatDefs/Misc/Unshaded.j3md");
+            mat_body.setColor("Color", colorPlayer);
+            Material mat_head = new Material(assetManager,
+                    "Common/MatDefs/Misc/Unshaded.j3md");
+            mat_head.setColor("Color", ColorRGBA.Red);
 
-        node.setUserData("width", PLAYER_BODY_WIDTH);
-        node.setUserData("height", PLAYER_BODY_HEIGHT);
+            node.setUserData("width", PLAYER_BODY_WIDTH);
+            node.setUserData("height", PLAYER_BODY_HEIGHT);
 
-        Geometry body = new Geometry("body",
-                new Box(PLAYER_BODY_WIDTH,
-                PLAYER_BODY_HEIGHT, 0));
-        body.setMaterial(mat_body);
+            Geometry body = new Geometry("body",
+                    new Box(PLAYER_BODY_WIDTH,
+                    PLAYER_BODY_HEIGHT, 0));
+            body.setMaterial(mat_body);
 
-        Geometry head = new Geometry("head",
-                new Box(PLAYER_BODY_WIDTH / 4f,
-                PLAYER_BODY_HEIGHT / 4f, 0));
-        head.setMaterial(mat_head);
-        head.setLocalTranslation(PLAYER_BODY_WIDTH, 0, 0);
+            Geometry head = new Geometry("head",
+                    new Box(PLAYER_BODY_WIDTH / 4f,
+                    PLAYER_BODY_HEIGHT / 4f, 0));
+            head.setMaterial(mat_head);
+            head.setLocalTranslation(PLAYER_BODY_WIDTH, 0, 0);
 
-        Picture whip_spin_pic = new Picture("whip_spin_state");
-        Texture2D tex = (Texture2D) assetManager.loadTexture(
-                "Textures/spiral.png");
-        whip_spin_pic.setTexture(assetManager, tex, true);
-        whip_spin_pic.setWidth(WHIP_WIDTH);
-        whip_spin_pic.setHeight(WHIP_HEIGHT);
-        whip_spin_pic.setLocalTranslation(PLAYER_BODY_WIDTH, -PLAYER_BODY_HEIGHT, 0);
-        whip_spin_pic.rotate(0, 0, FastMath.HALF_PI);
+            Picture whip_spin_pic = new Picture("whip_spin_state");
+            Texture2D tex = (Texture2D) assetManager.loadTexture(
+                    "Textures/spiral.png");
+            whip_spin_pic.setTexture(assetManager, tex, true);
+            whip_spin_pic.setWidth(WHIP_WIDTH);
+            whip_spin_pic.setHeight(WHIP_HEIGHT);
+            whip_spin_pic.setLocalTranslation(PLAYER_BODY_WIDTH, -PLAYER_BODY_HEIGHT, 0);
+            whip_spin_pic.rotate(0, 0, FastMath.HALF_PI);
 
 
-        BillboardControl billboard = new BillboardControl();
-        Geometry healthbar = new Geometry("healthbar", new Quad(4f, 0.2f));
-        Material mathb = new Material(assetManager,
-                "Common/MatDefs/Misc/Unshaded.j3md");
-        mathb.setColor("Color", ColorRGBA.Red);
-        healthbar.setMaterial(mathb);
-        healthbar.center();
-        healthbar.move(0, 7, 2);
-        healthbar.addControl(billboard);
+            BillboardControl billboard = new BillboardControl();
+            Geometry healthbar = new Geometry("healthbar", new Quad(4f, 0.2f));
+            Material mathb = new Material(assetManager,
+                    "Common/MatDefs/Misc/Unshaded.j3md");
+            mathb.setColor("Color", ColorRGBA.Red);
+            healthbar.setMaterial(mathb);
+            healthbar.center();
+            healthbar.move(0, 7, 2);
+            healthbar.addControl(billboard);
 
-        node.attachChild(healthbar);
+            node.attachChild(healthbar);
 
-        node.attachChild(body);
-        node.attachChild(head);
-        node.attachChild(whip_spin_pic);
+            node.attachChild(body);
+            node.attachChild(head);
+            node.attachChild(whip_spin_pic);
 
-        return node;
+            return node;
+        } else if (name.equals("player2")) {
+            Node node = new Node(name);
+
+            Material mat_body = new Material(assetManager,
+                    "Common/MatDefs/Misc/Unshaded.j3md");
+            mat_body.setColor("Color", colorPlayer2);
+            Material mat_head = new Material(assetManager,
+                    "Common/MatDefs/Misc/Unshaded.j3md");
+            mat_head.setColor("Color", ColorRGBA.Red);
+
+            node.setUserData("width", PLAYER_BODY_WIDTH);
+            node.setUserData("height", PLAYER_BODY_HEIGHT);
+
+            Geometry body = new Geometry("body",
+                    new Box(PLAYER_BODY_WIDTH,
+                    PLAYER_BODY_HEIGHT, 0));
+            body.setMaterial(mat_body);
+
+            Geometry head = new Geometry("head",
+                    new Box(PLAYER_BODY_WIDTH / 4f,
+                    PLAYER_BODY_HEIGHT / 4f, 0));
+            head.setMaterial(mat_head);
+            head.setLocalTranslation(PLAYER_BODY_WIDTH, 0, 0);
+
+            Picture whip_spin_pic = new Picture("whip_spin_state");
+            Texture2D tex = (Texture2D) assetManager.loadTexture(
+                    "Textures/spiral.png");
+            whip_spin_pic.setTexture(assetManager, tex, true);
+            whip_spin_pic.setWidth(WHIP_WIDTH);
+            whip_spin_pic.setHeight(WHIP_HEIGHT);
+            whip_spin_pic.setLocalTranslation(PLAYER_BODY_WIDTH, -PLAYER_BODY_HEIGHT, 0);
+            whip_spin_pic.rotate(0, 0, FastMath.HALF_PI);
+
+
+            BillboardControl billboard = new BillboardControl();
+            Geometry healthbar = new Geometry("healthbar", new Quad(4f, 0.2f));
+            Material mathb = new Material(assetManager,
+                    "Common/MatDefs/Misc/Unshaded.j3md");
+            mathb.setColor("Color", ColorRGBA.Red);
+            healthbar.setMaterial(mathb);
+            healthbar.center();
+            healthbar.move(0, 7, 2);
+            healthbar.addControl(billboard);
+
+            node.attachChild(healthbar);
+
+            node.attachChild(body);
+            node.attachChild(head);
+            node.attachChild(whip_spin_pic);
+
+            return node;
+
+        }
+        return null;
     }
 
     private ProtocolMessage getProtocolMessage() {
@@ -386,6 +452,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
         entry.x = player.getLocalTranslation().x;
         entry.y = player.getLocalTranslation().y;
         entry.whip_heat = player.getControl(PlayerControl.class).mouse_pressed;
+        entry.color = colorPlayer;
         protocolMessage.addEntry(entry);
         return protocolMessage;
     }

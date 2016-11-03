@@ -15,6 +15,7 @@ import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import java.io.IOException;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,7 +49,7 @@ public class StartScreen extends AbstractAppState implements ScreenController {
             server.start();
             server.addMessageListener(new ServerListener(owner), ProtocolMessage.class);
             server.addConnectionListener(new ServerConnectionListener(this));
-            setTextOpenServerBody("Loading... " + InetAddress.getLocalHost().getHostAddress() + ":" + PORT);
+            setTextOpenServerBody("Loading... " + Inet4Address.getLocalHost().getHostAddress() + ":" + PORT);
         } catch (Exception ex) {
             Logger.getLogger(StartScreen.class.getName()).log(Level.SEVERE, null, ex);
             setTextOpenServerHead("Error creating server");
@@ -89,7 +90,6 @@ public class StartScreen extends AbstractAppState implements ScreenController {
 
         if (client != null) {
             client.close();
-            client.close();
             client = null;
         }
 
@@ -101,7 +101,7 @@ public class StartScreen extends AbstractAppState implements ScreenController {
             client = Network.connectToServer(ip, 6143);
             client.start();
             client.addMessageListener(new ClientListener(owner), ProtocolMessage.class);
-            client.addErrorListener(new ClientErrorListener());
+            client.addErrorListener(new ClientErrorListener(this));
             owner.initPlayer("player2");
             nifty.gotoScreen("game");
             //textField = nifty.getCurrentScreen().findElementByName("input");
@@ -125,9 +125,6 @@ public class StartScreen extends AbstractAppState implements ScreenController {
         app.stop();
     }
 
-    public String getPlayerName() {
-        return new String("Oleg");
-    }
 
     public void bind(Nifty nifty, Screen screen) {
         this.nifty = nifty;

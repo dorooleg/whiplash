@@ -4,6 +4,7 @@
  */
 package mygame;
 
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
@@ -37,7 +38,7 @@ public class ProtocolMessage extends AbstractMessage  {
         public long identifier;
         public float x;
         public float y;
-        public long color;
+        public ColorRGBA color;
         public Quaternion rotation;
         public ProtocolMessage.STATE_LASH state;
         public boolean  whip_heat;
