@@ -25,17 +25,31 @@ public class PlayerControl extends AbstractControl {
     public Float speed = 100f,
             speed_mouse = 10f;
     public Vector2f mouse_position;
-    public float trans;
+    
+    
     private int width;
     private int height;
     private int width_body;
     private int height_body;
+    
+    
     private float health_status;
     private float whip_status;
     private final float speed_whip = 0.03f;
+    
+    private static final float WHIP_WIDTH  = 30f;
+    private static final float WHIP_HEIGHT = 30f;
+    private static final float PLAYER_BODY_WIDTH = 30f;
+    private static final float PLAYER_BODY_HEIGHT = 30f;
+    private static final float RADIUS = 2f * FastMath.sqr(WHIP_HEIGHT);
+    private static final float WHIP_RADIUS = 10f * RADIUS;
+    private static  final  float WHIP_ANGLE = FastMath.PI / 12f;
+ 
+    
     public int draw_flag;
+    
     private MainMenu owner;
-
+    
     public float getHealth() {
         return health_status;
     }
@@ -57,8 +71,6 @@ public class PlayerControl extends AbstractControl {
 
         mouse_position = new Vector2f(width / 2 + 1, height / 2 + 1);
 
-        trans = FastMath.PI / 2;
-
         draw_flag = 0;
 
         health_status = 1f;
@@ -69,6 +81,7 @@ public class PlayerControl extends AbstractControl {
 
     @Override
     protected void controlUpdate(float tpf) {
+        
         if (rotate) {
             spatial.rotate(0, 0, FastMath.PI);
             rotate = false;
@@ -143,11 +156,52 @@ public class PlayerControl extends AbstractControl {
             whip_status = 0f;
         }
     }
-    
-    
-    
 
-    @Override
-    protected void controlRender(RenderManager rm, ViewPort vp) {
+    public boolean inRadiusWhipHit(Vector3f enemyPos){
+        Vector3f position_player  = spatial.getLocalTranslation();
+        
+        float p = FastMath.sqr(enemyPos.x - position_player.x) + 
+                  FastMath.sqr(enemyPos.y - position_player.y);
+        
+        Vector2f v = new Vector2f(enemyPos.x - position_player.x,
+                                  enemyPos.y - position_player.y);
+        float len = v.length();
+        
+        if (p  < WHIP_RADIUS) {
+            
+            float[] angle = {0, 0, 0};
+            spatial.getWorldRotation().toAngles(angle);
+            
+            float playerAngle = angle[2];
+            
+            if (angle[0] != 0)            
+                playerAngle = angle[0] - angle[2];
+            else 
+                playerAngle = angle[2];
+            
+            
+            Vector2f v1 = new Vector2f(FastMath.cos(playerAngle - WHIP_ANGLE),
+                                       FastMath.sin(playerAngle - WHIP_ANGLE));
+            Vector2f v2 = new Vector2f(FastMath.cos(playerAngle + WHIP_ANGLE),
+                                       FastMath.sin(playerAngle + WHIP_ANGLE));
+            
+            if (v1.x * v.y - v.x * v1.y > 0 &&
+                v2.x * v.y - v.x * v2.y < 0) {
+                System.out.println("collision");
+                return true;
+            }
+            
+            
+            
+        }
+        
+        
+        
+        
+        return false;
+        
     }
+    
+    @Override
+    protected void controlRender(RenderManager rm, ViewPort vp) {}
 }

@@ -217,22 +217,29 @@
       </image>
     </layer>
     <layer id="foreground" childLayout="horizontal">
-      <panel id="panel_left" width="80%" height="100%" childLayout="vertical" >  
-      
-      </panel>
-      <panel id="panel_right" width="20%" height="100%" childLayout="vertical" >  
-        <panel id="panel_bot_right" width="50%" height="5%" valign="center" childLayout="vertical">  
-         <control name="loadingbar" align="center" valign="center" width="100px" height="32px" />
-         <control name="loadingbar_empty" align="center" valign="center" x="-100px" y="-32px"
+      <panel id="panel_left"  align="left" valign="bottom"  width="20%" height="100%" childLayout="vertical" >  
+        <panel id="panel_bot_left" width="50%" height="5%" align="center" valign="center"  childLayout="vertical">  
+           <control name="loadingbar_blue"  width="100px" height="32px" />
+           <control name="loadingbar_empty_blue" x="-100px" y="-32px"
+                    width="100px" height="32px"/>
+           <control name="loadingbar2_blue"  width="100px" height="32px" />
+         </panel>
+        </panel>
+      <panel id="panel_right" align="right" valign="bottom"  width="20%" height="100%" childLayout="vertical" >  
+        <panel id="panel_bot_right" width="50%" height="5%"  childLayout="vertical">  
+         <control name="loadingbar" width="100px" height="32px" />
+         <control name="loadingbar_empty"  x="-100px" y="-32px"
                   width="100px" height="32px"/>
-         <control name="loadingbar2" align="center" valign="center" width="100px" height="32px" />
+         <control name="loadingbar2"  width="100px" height="32px" />
         </panel>
       </panel>
     </layer>
     
   </screen>
 
-
+  
+  <!-- red progress bar-->
+  
   <controlDefinition name = "loadingbar" controller = "mygame.StartScreen">
         <image filename="Interface/border.png" childLayout="absolute" 
                imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15">
@@ -260,6 +267,37 @@
                 height="100%"
                 imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15"/>    
     </controlDefinition>
+  
+  <!--blue progress bar-->
+  
+   <controlDefinition name = "loadingbar_blue" controller = "mygame.StartScreen">
+        <image filename="Interface/border_blue.png" childLayout="absolute" 
+               imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15">
+            <image id="progressbar1_blue" x="0" y="0" filename="Interface/inner_blue.png"
+                   width="32px" 
+                   height="100%"
+                   imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15"/>
+        </image>
+    </controlDefinition>
+
+
+    <controlDefinition name = "loadingbar2_blue" controller = "mygame.StartScreen">
+        <image filename="Interface/border_blue.png" childLayout="absolute" 
+               imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15">
+            <image id="progressbar2_blue" x="0" y="0" filename="Interface/inner_whip_blue.png" 
+                   width="32px" 
+                   height="100%"
+                   imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15"/>
+        </image>
+    </controlDefinition>
+    
+    <controlDefinition name = "loadingbar_empty_blue" controller = "mygame.StartScreen">
+        <image id="progressbar_empty_blue" x="0" y="0" filename="Interface/border_blue.png" childLayout="absolute" 
+                width="32px" 
+                height="100%"
+                imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15"/>    
+    </controlDefinition>
+  
   
     
   

@@ -26,6 +26,7 @@ import com.jme3.ui.Picture;
 import com.sun.istack.internal.NotNull;
 import de.lessvoid.nifty.Nifty;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,6 +36,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
 
     private StartScreen startScreen;
     private ArrayList<Callable> listEvents;
+    public ArrayList<Callable> shortListEvents;
     public Spatial player;
     public Spatial player2;
     private PlayerControl player_control;
@@ -42,22 +44,26 @@ public class MainMenu extends SimpleApplication implements ActionListener,
     private Node[] node_whip1;
     private Node[] node_whip2;
     private float time_simple_update = 0f;
-    private static final float WHIP_WIDTH = 60f;
-    private static final float WHIP_HEIGHT = 60f;
+    private static final float WHIP_WIDTH  = 30f;
+    private static final float WHIP_HEIGHT = 30f;
     private static final float PLAYER_BODY_WIDTH = 30f;
     private static final float PLAYER_BODY_HEIGHT = 30f;
     private ColorRGBA colorPlayer;
     private ColorRGBA colorPlayer2;
 
-//    private float health_status = 1f;
+    private float health_status = 1f;
+    
     public MainMenu() {
         listEvents = new ArrayList<Callable>();
+        shortListEvents = new ArrayList<Callable>();
         colorPlayer = ColorRGBA.Red;
         colorPlayer2 = ColorRGBA.Green;
     }
 
     @Override
     public void simpleInitApp() {
+
+
         setDisplayFps(false);
         setDisplayStatView(false);
         setPauseOnLostFocus(false);
@@ -188,6 +194,11 @@ public class MainMenu extends SimpleApplication implements ActionListener,
         startScreen.setProgress(player.getControl(PlayerControl.class).getHealth());
         startScreen.setProgressWhip(player.getControl(PlayerControl.class).getWhipStatus());
 
+        
+        startScreen.setProgressWhip_blue(0f);
+        startScreen.setProgress_Blue(health_status);
+
+
         player2 = getSpatial("player2");
         ((Node) player2).attachChild(node_whip2[0]);
         player2.setLocalTranslation(settings.getWidth() / 2,
@@ -208,9 +219,11 @@ public class MainMenu extends SimpleApplication implements ActionListener,
         guiNode.attachChild(player2);
     }
 
+
     void clearPlayers() {
         guiNode.detachAllChildren();
     }
+
 
     @Override
     public void onAnalog(String name, float value, float tpf) {
@@ -274,6 +287,18 @@ public class MainMenu extends SimpleApplication implements ActionListener,
                 }
                 listEvents.clear();
             }
+            
+            if (!shortListEvents.isEmpty()) {
+                Iterator<Callable> iterator = shortListEvents.iterator();
+                while (iterator.hasNext()) {
+                    try {
+                        iterator.next().call();
+                    } catch (Exception ex) {
+                        Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                shortListEvents.clear();
+            }
         }
 
         time_simple_update += tpf;
@@ -281,6 +306,9 @@ public class MainMenu extends SimpleApplication implements ActionListener,
         if (player == null || player2 == null) {
             return;
         }
+        
+        handlCollision();
+        
         startScreen.setProgressWhip(player.getControl(PlayerControl.class).getWhipStatus());
         if (player.getControl(PlayerControl.class).draw_flag == 1 && time_simple_update > 0.15f) {
 
@@ -328,8 +356,14 @@ public class MainMenu extends SimpleApplication implements ActionListener,
             player2.getControl(PlayerControl.class).draw_flag = 0;
             time_simple_update = 0;
         }
-
     }
+
+
+    private boolean handlCollision() {
+        return player.getControl(PlayerControl.class).inRadiusWhipHit(player2.getLocalTranslation());
+//        player2.getControl(PlayerControl.class).inRadiusWhipHit(player.getLocalTranslation());
+    }
+
 
     private void initCamera() {
         cam.setLocation(new Vector3f(0.0f, 0.0f, 0.5f));
@@ -349,7 +383,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
             mat_body.setColor("Color", colorPlayer);
             Material mat_head = new Material(assetManager,
                     "Common/MatDefs/Misc/Unshaded.j3md");
-            mat_head.setColor("Color", ColorRGBA.Green);
+            mat_head.setColor("Color", startScreen.server != null ? ColorRGBA.Green : ColorRGBA.Red);
 
             node.setUserData("width", PLAYER_BODY_WIDTH);
             node.setUserData("height", PLAYER_BODY_HEIGHT);
@@ -377,7 +411,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
             mat_body.setColor("Color", colorPlayer2);
             Material mat_head = new Material(assetManager,
                     "Common/MatDefs/Misc/Unshaded.j3md");
-            mat_head.setColor("Color", ColorRGBA.Red);
+            mat_head.setColor("Color", startScreen.server != null ? ColorRGBA.Red : ColorRGBA.Green);
 
             node.setUserData("width", PLAYER_BODY_WIDTH);
             node.setUserData("height", PLAYER_BODY_HEIGHT);
@@ -461,9 +495,12 @@ public class MainMenu extends SimpleApplication implements ActionListener,
         return whip_hit;
     }
 
-    public void drawWhip(String name_player) {
 
-//        startScreen.setProgress(player.getControl(PlayerControl.class).getHealth(), "");
+    public void drawWhip(String name_player) {        
+        if  (handlCollision()){  
+            health_status = Math.max(health_status - 0.1f,0);
+            startScreen.setProgress_Blue(health_status);
+        }
         draw_Node(name_player, 0, 1, false);
     }
 
@@ -483,7 +520,9 @@ public class MainMenu extends SimpleApplication implements ActionListener,
             return;
         }
 
+
         startScreen.setProgress(playerNode.getControl(PlayerControl.class).getHealth());
+
 
         playerNode.detachChildNamed(node[node_num_detach].getName());
         playerNode.attachChild(node[node_num_attac]);
