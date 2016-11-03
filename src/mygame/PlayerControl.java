@@ -28,8 +28,6 @@ public class PlayerControl extends AbstractControl {
             speed_mouse = 10f;
     public Vector2f mouse_position;
     public float trans;
-
-    private Node[] whipStates;
     
     private int width;
     private int height;
@@ -37,6 +35,8 @@ public class PlayerControl extends AbstractControl {
     private int width_body ;
     private int height_body ;
     
+    
+    public int draw_flag;
     
     private MainMenu owner;
     
@@ -50,11 +50,10 @@ public class PlayerControl extends AbstractControl {
         mouse_position = new Vector2f(width/2 +1  , height/2+1);
 
         trans = FastMath.PI/2;
+        
+        draw_flag = 0;
+        
         this.owner = owner;
-    }
-    
-    public void setWhipStates(Node[] whipStates) {
-        this.whipStates = whipStates;
     }
 
     @Override
@@ -111,14 +110,17 @@ public class PlayerControl extends AbstractControl {
 
         }
         
-        if (mouse_pressed){
+        if (mouse_pressed) {
             Node cur_node = (Node)spatial;
             Spatial child = cur_node.getChild("whip_spin_state");
-            child.rotate(0, 0, -10);
+            if (child!=null)
+                child.rotate(0, 0, -10);
             mouse_was_pressed = true;
         }
-        if (mouse_was_pressed && !mouse_pressed){
-            owner.drawWhip();
+        if (mouse_was_pressed && !mouse_pressed) {
+            draw_flag = 1;
+            owner.drawWhip(spatial.getName());
+            
             mouse_was_pressed = false;
         }
         
