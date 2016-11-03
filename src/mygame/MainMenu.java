@@ -50,6 +50,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
     private static final float WHIP_HEIGHT = 60f;
     private static final float PLAYER_BODY_WIDTH = 30f;
     private static final float PLAYER_BODY_HEIGHT = 30f;
+    private Sound sound;
 
     public MainMenu() {
         listEvents = new ArrayList<Callable>();
@@ -57,6 +58,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
 
     @Override
     public void simpleInitApp() {
+//        so
         setDisplayFps(false);
         setDisplayStatView(false);
         setPauseOnLostFocus(false);
@@ -81,6 +83,9 @@ public class MainMenu extends SimpleApplication implements ActionListener,
         //Serializing
         Serializer.registerClass(ProtocolMessage.class);
         Serializer.registerClass(ProtocolMessage.Entry.class);
+        sound = new Sound(assetManager);
+        
+        sound.startMusic();
     }
 
     @Override
@@ -118,7 +123,8 @@ public class MainMenu extends SimpleApplication implements ActionListener,
 
         if (name.equals("Mouse_Click_Left")) {
             player.getControl(PlayerControl.class).mouse_pressed = isPressed;
-
+//            
+            
             if (startScreen.client != null) {
                 startScreen.client.send(getProtocolMessage());
             }
@@ -220,6 +226,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
                 if (startScreen.server != null) {
                     startScreen.server.broadcast(getProtocolMessage());
                 }
+//                sound.shoot();
             }
         }
 
@@ -437,7 +444,13 @@ public class MainMenu extends SimpleApplication implements ActionListener,
     }
 
     public void drawWhip(String name_player) {
+//        sound.stopMusic();
+        sound.whip();
+        sound.moan();
         draw_Node(name_player, 0, 1, false);
+        
+//        sound.shootStop();
+//        sound.startMusic();
     }
 
     private void draw_Node(String name_player, int node_num_detach,
