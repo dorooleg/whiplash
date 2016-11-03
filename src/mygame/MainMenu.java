@@ -87,6 +87,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
     public void onAction(String name, boolean isPressed, float tpf) {
 
         if (name.equals("Escape")) {
+            startScreen.clean();
             startScreen.start("start");
         }
 
@@ -193,6 +194,11 @@ public class MainMenu extends SimpleApplication implements ActionListener,
 
         guiNode.attachChild(player);
         guiNode.attachChild(player2);
+    }
+    
+    void clearPlayers()
+    {
+        guiNode.detachAllChildren();
     }
 
     @Override
