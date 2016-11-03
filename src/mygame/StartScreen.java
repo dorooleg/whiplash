@@ -14,15 +14,17 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.tools.SizeValue;
 import java.io.IOException;
 import java.net.Inet4Address;
-import java.net.InetAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class StartScreen extends AbstractAppState implements ScreenController {
 
+
     private final static int PORT = 6143;
+
     private Nifty nifty;
     private Application app;
     private Screen screen;
@@ -31,6 +33,10 @@ public class StartScreen extends AbstractAppState implements ScreenController {
     private String ip;
     public Server server = null;
     public Client client = null;
+    private Element progressBarElement;
+    private Element progressBarWhipStatus;
+    private Element progressBarElement_empty;
+    private TextRenderer textRenderer;
 
     public StartScreen(MainMenu owner) {
         this.owner = owner;
@@ -112,6 +118,42 @@ public class StartScreen extends AbstractAppState implements ScreenController {
 
     }
 
+
+    public void setProgress(final float progress) {
+        if (progress != 0) {
+//            System.err.println("setProgress");
+//            System.err.println(progressBarElement.getParent().getWidth());
+            final int MIN_WIDTH = 32;
+            int pixelWidth = (int) (MIN_WIDTH + (progressBarElement.getParent().getWidth() - MIN_WIDTH) * progress);
+
+            progressBarElement.setConstraintWidth(new SizeValue(pixelWidth + "px"));
+            progressBarElement.getParent().layoutElements();
+        } else {
+//            System.out.println("prigress = " + progress);
+            progressBarElement.setVisible(false);
+
+        }
+
+    }
+    
+     public void setProgressWhip(final float progress) {
+        if (progress != 0) {
+//            System.err.println("whip .....");
+//            System.err.println(progressBarWhipStatus.getParent().getWidth());
+            final int MIN_WIDTH = 32;
+            int pixelWidth = (int) (MIN_WIDTH + (progressBarWhipStatus.getParent().getWidth() - MIN_WIDTH) * progress);
+
+            progressBarWhipStatus.setConstraintWidth(new SizeValue(pixelWidth + "px"));
+            progressBarWhipStatus.getParent().layoutElements();
+            progressBarWhipStatus.setVisible(true);
+        } else {
+//            System.out.println("whip = " + progress);
+            progressBarWhipStatus.setVisible(false);
+
+        }
+
+    }
+    
     public void start(String nextScreen) {
         nifty.gotoScreen(nextScreen);
     }
@@ -126,7 +168,18 @@ public class StartScreen extends AbstractAppState implements ScreenController {
     }
 
 
+    @Override
     public void bind(Nifty nifty, Screen screen) {
+        progressBarElement = nifty.getScreen("game").findElementByName("progressbar1");
+        progressBarElement.setWidth(100);
+
+        progressBarWhipStatus = nifty.getScreen("game").findElementByName("progressbar2");
+        progressBarWhipStatus.setWidth(100);
+        
+        progressBarElement_empty = nifty.getScreen("game").findElementByName("progressbar_empty");
+        progressBarElement_empty.setWidth(100);
+        progressBarElement_empty.setVisible(false);
+
         this.nifty = nifty;
         this.screen = screen;
 

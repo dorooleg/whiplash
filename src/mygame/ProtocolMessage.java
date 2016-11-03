@@ -42,6 +42,7 @@ public class ProtocolMessage extends AbstractMessage  {
         public Quaternion rotation;
         public ProtocolMessage.STATE_LASH state;
         public boolean  whip_heat;
+        public float health_status;
     }
     
     
@@ -60,7 +61,8 @@ public class ProtocolMessage extends AbstractMessage  {
                              + entry.y + " color = " + entry.color 
                              + " rotation " + entry.rotation 
                              + " state = " + entry.state  + " whip_heat = "
-                             + entry.whip_heat + "\n");
+                             + entry.whip_heat + " health_status = "
+                             + entry.health_status  + "\n");
        }
 
        return stringBuilder.toString(); 
