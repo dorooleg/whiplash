@@ -61,6 +61,9 @@ public class MainMenu extends SimpleApplication implements ActionListener,
         setDisplayStatView(false);
         setPauseOnLostFocus(false);
 
+        inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
+        inputManager.addMapping("Escape", new KeyTrigger(KeyInput.KEY_ESCAPE));
+
         startScreen = new StartScreen(this);
         stateManager.attach(startScreen);
 
@@ -80,6 +83,10 @@ public class MainMenu extends SimpleApplication implements ActionListener,
 
     @Override
     public void onAction(String name, boolean isPressed, float tpf) {
+
+        if (name.equals("Escape")) {
+            startScreen.start("start");
+        }
 
         if (name.equals("Rotate")) {
             player.getControl(PlayerControl.class).rotate = isPressed;
