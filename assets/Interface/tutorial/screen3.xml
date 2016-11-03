@@ -67,7 +67,7 @@
         <panel id="panel_bottom_left" height="50%" width="100%" valign="center" childLayout="center">  
           <control name="button" label="Server" id="StartButton" align="center" valign="center" 
                    visibleToMouse="true"> 
-            <interact onClick="startServer()" />
+            <interact onClick="startServer(server)" />
           </control>
         </panel>
         <panel id="panel_bottom_left" height="10%" width="100%" valign="center" childLayout="center">  
@@ -153,6 +153,39 @@
           <text text="${CALL.getPlayerName()}" 
           font="Interface/Fonts/Default.fnt" width="50%" height="50%" wrap="true" />
         </panel>      
+      </panel>
+    </layer>
+  </screen>
+  
+  <screen id="server" controller="mygame.StartScreen">
+    <layer id="background" childLayout="center">
+      <image filename="Interface/tutorial/start-background.png" 
+             align="center" 
+             width="100%" height="100%">
+      </image>
+    </layer>
+    <layer id="foreground" childLayout="horizontal">
+
+      <panel id="panel_bottom" height="25%" width="100%" align="center" childLayout="vertical" >  
+        <panel id="panel_bottom_left" height="150%" width="100%" valign="center" childLayout="center">  
+          
+        </panel>
+        
+        <panel id="panel_mid" height="15%" width="100%" align="center" childLayout="center">       
+          <text text="Please wait... " 
+          font="Interface/Fonts/Default.fnt" width="50%" height="50%" wrap="true" />
+        </panel>
+        <panel id="panel_mid" height="15%" width="100%" align="center" childLayout="center">       
+          <text text="${CALL.getPlayerName()}, Loading..." 
+          font="Interface/Fonts/Default.fnt" width="50%" height="50%" wrap="true" />
+        </panel> 
+        <panel id="panel_bottom_left" height="60%" width="100%" valign="center" childLayout="center">  
+          <control name="button" label="Return" id="StartButton" align="center" valign="center" 
+                   visibleToMouse="true"> 
+            <interact onClick="cancelServer()" />
+          </control>
+        </panel> 
+             
       </panel>
     </layer>
   </screen>

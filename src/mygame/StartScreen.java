@@ -31,17 +31,28 @@ public class StartScreen extends AbstractAppState implements ScreenController {
     }
 
     public void startServer() throws IOException, InterruptedException {
+        start("server");
         server = Network.createServer(6143);
         server.start();
         server.addMessageListener(new ServerListener(owner), ProtocolMessage.class);
         System.out.println("server");
+        
+        
         nifty.gotoScreen("server");
-        owner.initPlayer("player1");
+        
         System.out.println("server n");
-        while (!server.hasConnections()) {
-            Thread.sleep(1000);
-        }
+        //while (!server.hasConnections()) {
+        //    Thread.sleep(1000);
+        //}
+        //owner.initPlayer("player1");
         System.out.println("server conec");
+    }
+    
+    public void cancelServer() {
+        
+        nifty.gotoScreen("start");
+        //nifty.getSoundSystem()
+        
     }
     
     public void startClient() throws IOException {
