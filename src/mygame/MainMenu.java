@@ -189,11 +189,11 @@ public class MainMenu extends SimpleApplication implements ActionListener,
     @Override
     public void onAnalog(String name, float value, float tpf) {
         if (player != null) {
-            if (name.equals("Right") ||
-                name.equals("Left")  ||
-                name.equals("Down")  ||
-                name.equals("Up")    ||
-                name.equals("MouseMove")) {
+            if (name.equals("Right")
+                    || name.equals("Left")
+                    || name.equals("Down")
+                    || name.equals("Up")
+                    || name.equals("MouseMove")) {
                 player.getControl(PlayerControl.class).mouse_position =
                         inputManager.getCursorPosition();
                 player.getControl(PlayerControl.class).move_mouse = true;
@@ -238,7 +238,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
         synchronized (this) {
             if (!listEvents.isEmpty()) {
                 try {
-                   listEvents.get(listEvents.size() - 1).call();
+                    listEvents.get(listEvents.size() - 1).call();
                 } catch (Exception ex) {
                     Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -256,10 +256,6 @@ public class MainMenu extends SimpleApplication implements ActionListener,
 
             draw_Node("player1", 1, 2, false);
 
-//            Node cur = (Node) player;
-//            cur.detachChildNamed(node_whip1[1].getName());
-//            cur.attachChild(node_whip1[2]);
-
             player.getControl(PlayerControl.class).draw_flag = 2;
             time_simple_update = 0;
             return;
@@ -267,12 +263,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
 
         if (player.getControl(PlayerControl.class).draw_flag == 2 && time_simple_update > 0.15f) {
 
-            
             draw_Node("player1", 2, 3, false);
-//            Node playerNode = (Node) player;
-//            playerNode.detachChildNamed(node_whip1[2].getName());
-//            playerNode.attachChild(node_whip1[3]);
-//            playerNode.attachChild(node_whip1[3]);
 
             time_simple_update = 0;
             player.getControl(PlayerControl.class).draw_flag = 3;
@@ -281,12 +272,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
 
         if (player.getControl(PlayerControl.class).draw_flag == 3 && time_simple_update > 0.1f) {
             draw_Node("player1", 3, 0, true);
-            
-//            Node playerNode = (Node) player;
-//            playerNode.detachChildNamed(node_whip1[3].getName());
-//            node_whip1[0].setLocalRotation(Matrix3f.IDENTITY);
-//            playerNode.attachChild(node_whip1[0]);
-            
+
             player.getControl(PlayerControl.class).draw_flag = 0;
             time_simple_update = 0;
         }
@@ -296,10 +282,6 @@ public class MainMenu extends SimpleApplication implements ActionListener,
 
         if (player2.getControl(PlayerControl.class).draw_flag == 1 && time_simple_update > 0.15f) {
             draw_Node("player2", 1, 2, false);
-//            Node cur = (Node) player2;
-//            cur.detachChildNamed(node_whip2[1].getName());
-//            cur.attachChild(node_whip2[2]);
-
             player2.getControl(PlayerControl.class).draw_flag = 2;
             time_simple_update = 0;
             return;
@@ -307,22 +289,13 @@ public class MainMenu extends SimpleApplication implements ActionListener,
 
         if (player2.getControl(PlayerControl.class).draw_flag == 2 && time_simple_update > 0.15f) {
             draw_Node("player2", 2, 3, false);
-//            Node playerNode = (Node) player2;
-//            playerNode.detachChildNamed(node_whip2[2].getName());
-//            playerNode.attachChild(node_whip2[3]);
-//            playerNode.attachChild(node_whip2[3]);
-
             time_simple_update = 0;
             player2.getControl(PlayerControl.class).draw_flag = 3;
             return;
         }
 
         if (player2.getControl(PlayerControl.class).draw_flag == 3 && time_simple_update > 0.1f) {
-           draw_Node("player2", 3, 0, true);
-//            Node playerNode = (Node) player2;
-//            playerNode.detachChildNamed(node_whip2[3].getName());
-//            node_whip2[0].setLocalRotation(Matrix3f.IDENTITY);
-//            playerNode.attachChild(node_whip2[0]);
+            draw_Node("player2", 3, 0, true);
             player2.getControl(PlayerControl.class).draw_flag = 0;
             time_simple_update = 0;
         }
@@ -450,16 +423,6 @@ public class MainMenu extends SimpleApplication implements ActionListener,
 
     public void drawWhip(String name_player) {
         draw_Node(name_player, 0, 1, false);
-//        Node playerNode;
-//        if (name_player.equals("player1")) {
-//            playerNode = (Node) player;
-//            playerNode.detachChildNamed("whip_spin_state");
-//            playerNode.attachChild(node_whip1[1]);
-//        } else {
-//            playerNode = (Node) player2;
-//            playerNode.detachChildNamed("whip_spin_state");
-//            playerNode.attachChild(node_whip2[1]);
-//        }
     }
 
     private void draw_Node(String name_player, int node_num_detach,
