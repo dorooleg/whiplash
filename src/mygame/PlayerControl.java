@@ -61,6 +61,9 @@ public class PlayerControl extends AbstractControl {
     public float getWhipStatus() {
         return whip_status;
     }
+     public void setWhipStatus(float value) {
+        whip_status = value;
+    }
 
     public PlayerControl(int w, int h, int width_body_box, int height_body_box, MainMenu owner) {
         width = w;

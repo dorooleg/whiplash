@@ -193,10 +193,8 @@ public class MainMenu extends SimpleApplication implements ActionListener,
 
         startScreen.setProgress(player.getControl(PlayerControl.class).getHealth());
         startScreen.setProgressWhip(player.getControl(PlayerControl.class).getWhipStatus());
-
         
-        startScreen.setProgressWhip_blue(0f);
-        startScreen.setProgress_Blue(health_status);
+
 
 
         player2 = getSpatial("player2");
@@ -212,6 +210,8 @@ public class MainMenu extends SimpleApplication implements ActionListener,
 
         player2.addControl(player_control2);
 
+        startScreen.setProgress_Blue(player2.getControl(PlayerControl.class).getHealth());
+        startScreen.setProgressWhip_blue(player2.getControl(PlayerControl.class).getWhipStatus());
 
 //        Display.
 
@@ -267,7 +267,9 @@ public class MainMenu extends SimpleApplication implements ActionListener,
 
                     player2.getControl(PlayerControl.class).setHealth(
                             message.entries.get(0).health_status);
-
+                    
+                    player2.getControl(PlayerControl.class).setWhipStatus(
+                            message.entries.get(0).whip_status);
                     return null;
                 }
             });
@@ -308,8 +310,12 @@ public class MainMenu extends SimpleApplication implements ActionListener,
         }
         
         handlCollision();
+        if (startScreen.server==null)
+            startScreen.setProgressWhip(player.getControl(PlayerControl.class).getWhipStatus());
+        else
+            startScreen.setProgressWhip_blue(player2.getControl(PlayerControl.class).getWhipStatus());
+//        startScreen.setProgressWhip_blue(player2.getControl(PlayerControl.class).getWhipStatus());
         
-        startScreen.setProgressWhip(player.getControl(PlayerControl.class).getWhipStatus());
         if (player.getControl(PlayerControl.class).draw_flag == 1 && time_simple_update > 0.15f) {
 
             draw_Node("player1", 1, 2, false);
@@ -360,8 +366,8 @@ public class MainMenu extends SimpleApplication implements ActionListener,
 
 
     private boolean handlCollision() {
-        return player.getControl(PlayerControl.class).inRadiusWhipHit(player2.getLocalTranslation());
-//        player2.getControl(PlayerControl.class).inRadiusWhipHit(player.getLocalTranslation());
+        return  player.getControl(PlayerControl.class).inRadiusWhipHit(player2.getLocalTranslation()) &&
+        player2.getControl(PlayerControl.class).inRadiusWhipHit(player.getLocalTranslation());
     }
 
 
@@ -445,6 +451,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
         entry.whip_heat = player.getControl(PlayerControl.class).mouse_pressed;
         entry.color = colorPlayer;
         entry.health_status = player.getControl(PlayerControl.class).getHealth();
+        entry.whip_status = player.getControl(PlayerControl.class).getWhipStatus();
         protocolMessage.addEntry(entry);
         return protocolMessage;
     }
@@ -499,6 +506,11 @@ public class MainMenu extends SimpleApplication implements ActionListener,
     public void drawWhip(String name_player) {        
         if  (handlCollision()){  
             health_status = Math.max(health_status - 0.1f,0);
+            
+//            if (startScreen.server == null)
+//                startScreen.setProgress(player2.getControl(PlayerControl.class).getHealth());
+//            else
+//                startScreen.setProgress(player.getControl(PlayerControl.class).getHealth());
             startScreen.setProgress_Blue(health_status);
         }
         draw_Node(name_player, 0, 1, false);
@@ -511,6 +523,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
         if (name_player.equals("player1")) {
             playerNode = (Node) player;
             node = node_whip1;
+            
         }
         if (name_player.equals("player2")) {
             playerNode = (Node) player2;
@@ -519,10 +532,10 @@ public class MainMenu extends SimpleApplication implements ActionListener,
         if (playerNode == null || node == null) {
             return;
         }
-
-
-        startScreen.setProgress(playerNode.getControl(PlayerControl.class).getHealth());
-
+        if (startScreen.server != null)
+            startScreen.setProgress(playerNode.getControl(PlayerControl.class).getHealth());
+        else
+            startScreen.setProgress_Blue(playerNode.getControl(PlayerControl.class).getHealth());
 
         playerNode.detachChildNamed(node[node_num_detach].getName());
         playerNode.attachChild(node[node_num_attac]);
