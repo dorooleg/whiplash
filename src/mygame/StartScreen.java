@@ -15,7 +15,6 @@ import de.lessvoid.nifty.screen.ScreenController;
 import java.io.IOException;
 
 public class StartScreen extends AbstractAppState implements ScreenController {
-
     private Nifty nifty;
     private Application app;
     private Screen screen;
@@ -37,10 +36,12 @@ public class StartScreen extends AbstractAppState implements ScreenController {
         server.addMessageListener(new ServerListener(owner), ProtocolMessage.class);
         System.out.println("server");
         nifty.gotoScreen("server");
-        owner.initPlayer();
+        owner.initPlayer("player1");
+        System.out.println("server n");
         while (!server.hasConnections()) {
             Thread.sleep(1000);
         }
+        System.out.println("server conec");
     }
     
     public void startClient() throws IOException {
@@ -50,7 +51,7 @@ public class StartScreen extends AbstractAppState implements ScreenController {
         textField = nifty.getCurrentScreen().findElementByName("input");
         System.out.println("client");
         nifty.gotoScreen("client");
-        owner.initPlayer();
+        owner.initPlayer("player2");
     }
 
     public void start(String nextScreen) {
@@ -59,7 +60,7 @@ public class StartScreen extends AbstractAppState implements ScreenController {
 
     public void startGame(String nextScreen) {
         nifty.gotoScreen(nextScreen);
-        owner.initPlayer();
+        owner.initPlayer("player");
     }
 
     public void quitGame() {
