@@ -219,6 +219,33 @@ public class MainMenu extends SimpleApplication implements ActionListener,
 
         guiNode.attachChild(player);
         guiNode.attachChild(player2);
+
+        player2.getControl(PlayerControl.class).registerCallbackHealth(new Callable() {
+            @Override
+            public Object call() throws Exception {
+                if (startScreen.client != null) {
+                    startScreen.client.send(getProtocolMessage());
+                }
+
+                if (startScreen.server != null) {
+                    startScreen.server.broadcast(getProtocolMessage());
+                }
+                return null;
+            }
+        });
+
+        player.getControl(PlayerControl.class).registerCallbackHealth(new Callable() {
+            public Object call() throws Exception {
+                if (startScreen.client != null) {
+                    startScreen.client.send(getProtocolMessage());
+                }
+
+                if (startScreen.server != null) {
+                    startScreen.server.broadcast(getProtocolMessage());
+                }
+                return null;
+            }
+        });
     }
 
     void clearPlayers() {
@@ -372,6 +399,71 @@ public class MainMenu extends SimpleApplication implements ActionListener,
             time_simple_update = 0;
         }
 
+        if (startScreen.server != null) {
+            colorPlayer = new ColorRGBA(player.getControl(PlayerControl.class).getHealth(),
+                    0.0f,
+                    1 - player.getControl(PlayerControl.class).getHealth(), 1.0f);
+            colorPlayer2 = new ColorRGBA(1 - player2.getControl(PlayerControl.class).getHealth(),
+                    0.0f,
+                    player2.getControl(PlayerControl.class).getHealth(), 1.0f);
+        } else {
+            colorPlayer = new ColorRGBA(player2.getControl(PlayerControl.class).getHealth(),
+                    0.0f,
+                    1 - player2.getControl(PlayerControl.class).getHealth(), 1.0f);
+            colorPlayer2 = new ColorRGBA(1 - player.getControl(PlayerControl.class).getHealth(),
+                    0.0f,
+                    player.getControl(PlayerControl.class).getHealth(), 1.0f);
+
+        }
+
+        if (body != null) {
+            Material mat_body = new Material(assetManager,
+                    "Common/MatDefs/Misc/Unshaded.j3md");
+            mat_body.setColor("Color", startScreen.server != null ? colorPlayer : colorPlayer2);
+            body.setMaterial(mat_body);
+        }
+
+        if (body2 != null) {
+            Material mat_body = new Material(assetManager,
+                    "Common/MatDefs/Misc/Unshaded.j3md");
+            mat_body.setColor("Color", startScreen.server == null ? colorPlayer : colorPlayer2);
+            body2.setMaterial(mat_body);
+        }
+
+        if (player2.getControl(PlayerControl.class).getHealth() == 0.0f) {
+            System.out.println("You win!");
+            if (startScreen.client != null) {
+                startScreen.client.send(getProtocolMessage());
+            }
+
+            if (startScreen.server != null) {
+                startScreen.server.broadcast(getProtocolMessage());
+            }
+            startScreen.clean();
+            startScreen.clearPlayers();
+            //startScreen.nifty.gotoScreen("win");
+
+        } else if (player.getControl(PlayerControl.class).getHealth() == 0.0f) {
+            System.out.println("You lose!");
+            if (startScreen.client != null) {
+                startScreen.client.send(getProtocolMessage());
+            }
+
+            if (startScreen.server != null) {
+                startScreen.server.broadcast(getProtocolMessage());
+            }
+            startScreen.clean();
+            startScreen.clearPlayers();
+            startScreen.nifty.gotoScreen("lose");
+        }
+
+        /*
+         Material mat_head = new Material(assetManager,
+         "Common/MatDefs/Misc/Unshaded.j3md");
+         mat_head.setColor("Color", startScreen.server != null ? colorPlayer : colorPlayer);
+         player2.setMaterial(mat_head);
+         */
+
 //        if (startScreen.client != null) {
 //            startScreen.client.send(getProtocolMessage());
 //        }
@@ -407,6 +499,8 @@ public class MainMenu extends SimpleApplication implements ActionListener,
         viewPort.setBackgroundColor(ColorRGBA.White);
         cam.setParallelProjection(true);
     }
+    Geometry body;
+    Geometry body2;
 
     private Spatial getSpatial(String name) {
         if (name.equals("player1") || name.equals("player")) {
@@ -422,7 +516,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
             node.setUserData("width", PLAYER_BODY_WIDTH);
             node.setUserData("height", PLAYER_BODY_HEIGHT);
 
-            Geometry body = new Geometry("body",
+            body = new Geometry("body",
                     new Box(PLAYER_BODY_WIDTH,
                     PLAYER_BODY_HEIGHT, 0));
             body.setMaterial(mat_body);
@@ -450,10 +544,10 @@ public class MainMenu extends SimpleApplication implements ActionListener,
             node.setUserData("width", PLAYER_BODY_WIDTH);
             node.setUserData("height", PLAYER_BODY_HEIGHT);
 
-            Geometry body = new Geometry("body",
+            body2 = new Geometry("body",
                     new Box(PLAYER_BODY_WIDTH,
                     PLAYER_BODY_HEIGHT, 0));
-            body.setMaterial(mat_body);
+            body2.setMaterial(mat_body);
 
             Geometry head = new Geometry("head",
                     new Box(PLAYER_BODY_WIDTH / 4f,
@@ -461,7 +555,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
             head.setMaterial(mat_head);
             head.setLocalTranslation(PLAYER_BODY_WIDTH, 0, 0);
 
-            node.attachChild(body);
+            node.attachChild(body2);
             node.attachChild(head);
 
             return node;

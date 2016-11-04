@@ -11,6 +11,9 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PlayerControl extends AbstractControl {
 
@@ -41,7 +44,11 @@ public class PlayerControl extends AbstractControl {
     private static final float WHIP_ANGLE = FastMath.PI / 12f;
     public int draw_flag;
     private MainMenu owner;
+    Callable healthCallback;
 
+    public void registerCallbackHealth(Callable call) {
+        healthCallback = call;
+    }
     public float getHealth() {
         return health_status;
     }
@@ -51,6 +58,14 @@ public class PlayerControl extends AbstractControl {
     }
     public void decreaseHealth() {
         health_status = Math.max(health_status - 0.1f, 0f);
+        if (healthCallback != null) {
+            try {
+                healthCallback.call();
+            } catch (Exception ex) {
+                Logger.getLogger(PlayerControl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
     }
 
     public float getWhipStatus() {

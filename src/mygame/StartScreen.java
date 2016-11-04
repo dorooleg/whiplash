@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 public class StartScreen extends AbstractAppState implements ScreenController {
 
     private final static int PORT = 6143;
-    private Nifty nifty;
+    Nifty nifty;
     private Application app;
     private Screen screen;
     //private Element textField;
