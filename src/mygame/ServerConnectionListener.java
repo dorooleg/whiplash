@@ -26,6 +26,7 @@ public class ServerConnectionListener implements ConnectionListener {
     public void connectionRemoved(Server s, HostedConnection c) {
         screen.clean();
         screen.clearPlayers();
+        screen.nifty.gotoScreen("start");
     }
     
 }

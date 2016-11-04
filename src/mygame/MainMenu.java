@@ -442,7 +442,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
                 }
                 startScreen.clean();
                 startScreen.clearPlayers();
-                //startScreen.nifty.gotoScreen("win");
+                startScreen.nifty.gotoScreen("win");
             }
 
         } else if (player.getControl(PlayerControl.class).getHealth() == 0.0f) {
@@ -457,7 +457,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
                 }
                 startScreen.clean();
                 startScreen.clearPlayers();
-                //startScreen.nifty.gotoScreen("lose");
+                startScreen.nifty.gotoScreen("lose");
             }
         }
 

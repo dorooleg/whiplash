@@ -299,6 +299,55 @@
     </controlDefinition>
   
   
-    
+    <screen id="win" controller="mygame.StartScreen">
+    <layer id="background" childLayout="center">
+      <image filename="Interface/tutorial/game_over.jpg" 
+             align="center" 
+             width="100%" height="100%">
+      </image>    
+    </layer>
+    <layer id="foreground" childLayout="horizontal">
+      <panel id="panel_bottom" height="50%" width="100%" align="center" childLayout="vertical" >  
+        <panel id="panel_bottom_left" height="150%" width="100%" valign="center" childLayout="center">           
+        </panel>      
+        <panel id="panel_mid" height="15%" width="100%" align="center" childLayout="center">       
+          <text id="text_open_server_head" text="You Win" 
+          font="Interface/Fonts/Default.fnt" width="50%" height="50%" wrap="true" />
+        </panel>      
+        <panel id="panel_bottom_left" height="15%" width="100%" valign="center" childLayout="center">  
+          <control name="button" label="Repeat?" id="StartButton" align="center" valign="center" 
+                   visibleToMouse="true"> 
+            <interact onClick="start(start)" />
+          </control>
+        </panel>             
+      </panel>
+    </layer>
+  </screen>
+  
+  <screen id="lose" controller="mygame.StartScreen">
+    <layer id="background" childLayout="center">
+      <image filename="Interface/tutorial/game_over.jpg" 
+             align="center" 
+             width="100%" height="100%">
+      </image>    
+    </layer>
+    <layer id="foreground" childLayout="horizontal">
+      <panel id="panel_bottom" height="50%" width="100%" align="center" childLayout="vertical" >  
+        <panel id="panel_bottom_left" height="150%" width="100%" valign="center" childLayout="center">           
+        </panel>      
+        <panel id="panel_mid" height="15%" width="100%" align="center" childLayout="center">       
+          <text id="text_open_server_head" text="You Lose" 
+          font="Interface/Fonts/Default.fnt" width="50%" height="50%" wrap="true" />
+        </panel>      
+        <panel id="panel_bottom_left" height="15%" width="100%" valign="center" childLayout="center">  
+          <control name="button" label="Repeat?" id="StartButton" align="center" valign="center" 
+                   visibleToMouse="true"> 
+            <interact onClick="start(start)" />
+          </control>
+        </panel> 
+             
+      </panel>
+    </layer>
+  </screen>
   
 </nifty>

@@ -100,8 +100,6 @@ public class StartScreen extends AbstractAppState implements ScreenController {
             client.close();
             client = null;
         }
-
-        nifty.gotoScreen("start");
     }
 
     public void startClient() {
