@@ -431,30 +431,34 @@ public class MainMenu extends SimpleApplication implements ActionListener,
         }
 
         if (player2.getControl(PlayerControl.class).getHealth() == 0.0f) {
-            System.out.println("You win!");
-            if (startScreen.client != null) {
-                startScreen.client.send(getProtocolMessage());
-            }
+            if (startScreen.server != null || startScreen.client != null) {
+                System.out.println("You win!");
+                if (startScreen.client != null) {
+                    startScreen.client.send(getProtocolMessage());
+                }
 
-            if (startScreen.server != null) {
-                startScreen.server.broadcast(getProtocolMessage());
+                if (startScreen.server != null) {
+                    startScreen.server.broadcast(getProtocolMessage());
+                }
+                startScreen.clean();
+                startScreen.clearPlayers();
+                //startScreen.nifty.gotoScreen("win");
             }
-            startScreen.clean();
-            startScreen.clearPlayers();
-            //startScreen.nifty.gotoScreen("win");
 
         } else if (player.getControl(PlayerControl.class).getHealth() == 0.0f) {
-            System.out.println("You lose!");
-            if (startScreen.client != null) {
-                startScreen.client.send(getProtocolMessage());
-            }
+            if (startScreen.server != null || startScreen.client != null) {
+                System.out.println("You lose!");
+                if (startScreen.client != null) {
+                    startScreen.client.send(getProtocolMessage());
+                }
 
-            if (startScreen.server != null) {
-                startScreen.server.broadcast(getProtocolMessage());
+                if (startScreen.server != null) {
+                    startScreen.server.broadcast(getProtocolMessage());
+                }
+                startScreen.clean();
+                startScreen.clearPlayers();
+                //startScreen.nifty.gotoScreen("lose");
             }
-            startScreen.clean();
-            startScreen.clearPlayers();
-            startScreen.nifty.gotoScreen("lose");
         }
 
         /*
