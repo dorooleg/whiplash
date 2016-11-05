@@ -7,13 +7,12 @@ package mygame;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
-import com.sun.istack.internal.NotNull;
 
 public class ServerListener implements MessageListener<HostedConnection> {
     
     private MainMenu mainMenu = null;
   
-    public ServerListener(@NotNull MainMenu menu) {
+    public ServerListener(MainMenu menu) {
         mainMenu = menu;
     }
   

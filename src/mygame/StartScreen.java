@@ -6,7 +6,6 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.network.Client;
 import com.jme3.network.Network;
 import com.jme3.network.Server;
-import com.sun.istack.internal.NotNull;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.TextFieldChangedEvent;
@@ -66,17 +65,17 @@ public class StartScreen extends AbstractAppState implements ScreenController {
         }
     }
 
-    public void setTextOpenServerBody(@NotNull final String text) {
+    public void setTextOpenServerBody(final String text) {
         Element element = nifty.getScreen("server").findElementByName("text_open_server_body");
         element.getRenderer(TextRenderer.class).setText(text);
     }
 
-    public void setTextOpenServerHead(@NotNull final String text) {
+    public void setTextOpenServerHead(final String text) {
         Element element = nifty.getScreen("server").findElementByName("text_open_server_head");
         element.getRenderer(TextRenderer.class).setText(text);
     }
 
-    public void setTextClient(@NotNull final String text) {
+    public void setTextClient(final String text) {
         Element element = nifty.getScreen("ip").findElementByName("text_client");
         element.getRenderer(TextRenderer.class).setText(text);
     }

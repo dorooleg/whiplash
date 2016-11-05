@@ -5,7 +5,6 @@
 package mygame;
 
 import com.jme3.network.ErrorListener;
-import com.sun.istack.internal.NotNull;
 
 /**
  *
@@ -15,7 +14,7 @@ public class ClientErrorListener implements ErrorListener {
 
     private StartScreen screen = null;
 
-    public ClientErrorListener(@NotNull StartScreen screen) {
+    public ClientErrorListener(StartScreen screen) {
         this.screen = screen;
     }
 

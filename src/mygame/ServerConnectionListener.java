@@ -7,7 +7,6 @@ package mygame;
 import com.jme3.network.ConnectionListener;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Server;
-import com.sun.istack.internal.NotNull;
 
 /**
  *
@@ -16,7 +15,7 @@ import com.sun.istack.internal.NotNull;
 public class ServerConnectionListener implements ConnectionListener {
     private StartScreen screen = null;
   
-    public ServerConnectionListener(@NotNull StartScreen screen) {
+    public ServerConnectionListener(StartScreen screen) {
         this.screen = screen;
     }
     public void connectionAdded(Server s, HostedConnection c) {

@@ -23,7 +23,6 @@ import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture2D;
 import com.jme3.ui.Picture;
-import com.sun.istack.internal.NotNull;
 import de.lessvoid.nifty.Nifty;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -277,7 +276,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
 
     }
 
-    public void updateState(@NotNull final ProtocolMessage message) {
+    public void updateState(final ProtocolMessage message) {
         synchronized (this) {
             listEvents.add(new Callable() {
                 public Object call() throws Exception {

@@ -6,7 +6,6 @@ package mygame;
 
 import com.jme3.network.Client;
 import com.jme3.network.ClientStateListener;
-import com.sun.istack.internal.NotNull;
 
 /**
  *
@@ -15,7 +14,7 @@ import com.sun.istack.internal.NotNull;
 public class ClientConnectionListener implements ClientStateListener {
     private StartScreen screen = null;
 
-    public ClientConnectionListener(@NotNull StartScreen screen) {
+    public ClientConnectionListener(StartScreen screen) {
         this.screen = screen;
     }
     

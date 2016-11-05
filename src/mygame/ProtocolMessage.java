@@ -8,7 +8,6 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
-import com.sun.istack.internal.NotNull;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -25,7 +24,7 @@ public class ProtocolMessage extends AbstractMessage {
         DISABLE
     }
 
-    void addEntry(@NotNull Entry entry) {
+    void addEntry(Entry entry) {
         entries.add(entry);
     }
 
