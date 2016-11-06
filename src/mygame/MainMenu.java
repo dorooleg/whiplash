@@ -26,6 +26,7 @@ import com.jme3.ui.Picture;
 import de.lessvoid.nifty.Nifty;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,6 +50,7 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
     private Sound sound;
     private ColorRGBA colorPlayer;
     private ColorRGBA colorPlayer2;
+    private Random generator = new Random();
 
     public MainMenu() {
         listEvents = new ArrayList<Callable>();
@@ -96,7 +98,7 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
 
         if (name.equals("Escape")) {
             startScreen.cleanNetwork();
-            startScreen.clearPlayers();
+            clean();
             startScreen.start("start");
         }
 
@@ -185,8 +187,9 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
         player = getSpatial("player1");
         ((Node) player).attachChild(node_whip1[0]);
 
-        player.setLocalTranslation(settings.getWidth() / 2,
-                settings.getHeight() / 2, 0f);
+        float randomX = 120 + (int) generator.nextInt(settings.getWidth() - 240);
+        float randomY = 65 + (int) generator.nextInt(settings.getHeight() - 105);
+        player.setLocalTranslation(randomX, randomY, 0f);
         player_control = new PlayerControl(settings.getWidth(),
                 settings.getHeight(),
                 (int) PLAYER_BODY_WIDTH, (int) PLAYER_BODY_HEIGHT,
@@ -243,6 +246,14 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
                 return null;
             }
         });
+        
+        if (startScreen.client != null) {
+            startScreen.client.send(getProtocolMessage());
+        }
+
+        if (startScreen.server != null) {
+            startScreen.server.broadcast(getProtocolMessage());
+        }
     }
 
     void clearPlayers() {

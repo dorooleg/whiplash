@@ -24,6 +24,7 @@ public class ClientConnectionListener implements ClientStateListener {
     }
 
     public void clientDisconnected(Client c, DisconnectInfo info) {
+        System.out.println("Disconnected");
         screen.cleanNetwork();
         screen.owner.clean();
         screen.nifty.gotoScreen("start");

@@ -19,6 +19,7 @@ public class ClientErrorListener implements ErrorListener {
     }
 
     public void handleError(Object source, Throwable t) {
+        System.out.println("handle error");
         screen.cleanNetwork();
         screen.owner.clean();
         screen.nifty.gotoScreen("start");
