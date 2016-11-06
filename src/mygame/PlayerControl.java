@@ -42,6 +42,10 @@ public class PlayerControl extends AbstractControl {
     private static final float RADIUS = 2f * FastMath.sqr(WHIP_HEIGHT);
     private static final float WHIP_RADIUS = 10f * RADIUS;
     private static final float WHIP_ANGLE = FastMath.PI / 12f;
+    private static final float BORDER_WIDTH_LEFT = 100.0f;
+    private static final float BORDER_WIDTH_RIGHT = 100.0f;
+    private static final float BORDER_WIDTH_TOP = 20.0f;
+    private static final float BORDER_WIDTH_BOTTOM = 45.0f;
     public int draw_flag;
     private MainMenu owner;
     Callable healthCallback;
@@ -49,6 +53,7 @@ public class PlayerControl extends AbstractControl {
     public void registerCallbackHealth(Callable call) {
         healthCallback = call;
     }
+
     public float getHealth() {
         return health_status;
     }
@@ -56,6 +61,7 @@ public class PlayerControl extends AbstractControl {
     public void setHealth(float health) {
         health_status = health;
     }
+
     public void decreaseHealth() {
         health_status = Math.max(health_status - 0.1f, 0f);
         if (healthCallback != null) {
@@ -65,7 +71,7 @@ public class PlayerControl extends AbstractControl {
                 Logger.getLogger(PlayerControl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
     }
 
     public float getWhipStatus() {
@@ -117,30 +123,32 @@ public class PlayerControl extends AbstractControl {
             Quaternion q = new Quaternion();
             q.fromAngles(angles);
             spatial.setLocalRotation(q);
-
         }
+
+        double sizeBorderPlayer = 30.0 + Math.abs(Math.sin(2 * Math.abs(getPlayerAngle())))
+                * (Math.sqrt(2 * 30 * 30) - 30.0);
 
         if (left_key) {
             Vector3f local_position = spatial.getLocalTranslation();
-            if (local_position.x > 30) {
+            if (local_position.x > sizeBorderPlayer + BORDER_WIDTH_LEFT) {
                 spatial.move(-tpf * speed, 0, 0);
             }
         }
         if (right_key) {
             Vector3f local_position = spatial.getLocalTranslation();
-            if (local_position.x < width - 30) {
+            if (local_position.x < width - sizeBorderPlayer - BORDER_WIDTH_RIGHT) {
                 spatial.move(tpf * speed, 0, 0);
             }
         }
         if (up_key) {
             Vector3f local_position = spatial.getLocalTranslation();
-            if (local_position.y < height - 30) {
+            if (local_position.y < height - sizeBorderPlayer - BORDER_WIDTH_TOP) {
                 spatial.move(0, tpf * speed, 0);
             }
         }
         if (down_key) {
             Vector3f local_position = spatial.getLocalTranslation();
-            if (local_position.y > 30) {
+            if (local_position.y > sizeBorderPlayer + BORDER_WIDTH_BOTTOM) {
                 spatial.move(0, -tpf * speed, 0);
             }
         }
@@ -167,6 +175,20 @@ public class PlayerControl extends AbstractControl {
             mouse_was_pressed = false;
             whip_status = 0f;
         }
+    }
+
+    public float getPlayerAngle() {
+        float[] angle = {0, 0, 0};
+        spatial.getWorldRotation().toAngles(angle);
+
+        float playerAngle = angle[2];
+
+        if (angle[0] != 0) {
+            playerAngle = angle[0] - angle[2];
+        } else {
+            playerAngle = angle[2];
+        }
+        return playerAngle;
     }
 
     public boolean inRadiusWhipHit(Vector3f enemyPos) {

@@ -5,15 +5,15 @@
 
 # Запуск игры
 * Собранный проект
-- Windows dist/Whiplash-Windows.zip
-- Linux dist/Whiplash-Linux.zip
-- Mac OS dist/Whiplash-MacOSX.zi
-- Android текущая версия еще не портирована
+ * Windows dist/Whiplash-Windows.zip
+ * Linux dist/Whiplash-Linux.zip
+ * Mac OS dist/Whiplash-MacOSX.zi
+ * Android текущая версия еще не портирована
 
 * Сборка из исходников
-1. Скачать jmonkeyengine http://jmonkeyengine.org/
-2. Собрать проект (нажать кнопку Build)
-3. Начать играть (нажать кнопку Run)
+ 1. Скачать jmonkeyengine http://jmonkeyengine.org/
+ 2. Собрать проект (нажать кнопку Build)
+ 3. Начать играть (нажать кнопку Run)
 
 # Как играть
 Необходимо управлять квадратом и как можно быстрее бить противника плеткой, пока он не станет твоего цвета

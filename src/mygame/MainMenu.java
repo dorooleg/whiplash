@@ -30,8 +30,7 @@ import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MainMenu extends SimpleApplication implements ActionListener,
-        AnalogListener {
+public class MainMenu extends SimpleApplication implements ActionListener, AnalogListener {
 
     private StartScreen startScreen;
     private ArrayList<Callable> listEvents;
@@ -50,13 +49,12 @@ public class MainMenu extends SimpleApplication implements ActionListener,
     private Sound sound;
     private ColorRGBA colorPlayer;
     private ColorRGBA colorPlayer2;
-    private float health_status = 1f;
 
     public MainMenu() {
         listEvents = new ArrayList<Callable>();
         shortListEvents = new ArrayList<Callable>();
         colorPlayer = ColorRGBA.Red;
-        colorPlayer2 = ColorRGBA.Green;
+        colorPlayer2 = ColorRGBA.Blue;
     }
 
     @Override
@@ -97,7 +95,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
     public void onAction(String name, boolean isPressed, float tpf) {
 
         if (name.equals("Escape")) {
-            startScreen.clean();
+            startScreen.cleanNetwork();
             startScreen.clearPlayers();
             startScreen.start("start");
         }
@@ -439,8 +437,9 @@ public class MainMenu extends SimpleApplication implements ActionListener,
                 if (startScreen.server != null) {
                     startScreen.server.broadcast(getProtocolMessage());
                 }
-                startScreen.clean();
+                startScreen.cleanNetwork();
                 startScreen.clearPlayers();
+                clean();
                 startScreen.nifty.gotoScreen("win");
             }
 
@@ -454,8 +453,9 @@ public class MainMenu extends SimpleApplication implements ActionListener,
                 if (startScreen.server != null) {
                     startScreen.server.broadcast(getProtocolMessage());
                 }
-                startScreen.clean();
+                startScreen.cleanNetwork();
                 startScreen.clearPlayers();
+                clean();
                 startScreen.nifty.gotoScreen("lose");
             }
         }
@@ -514,7 +514,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
             mat_body.setColor("Color", colorPlayer);
             Material mat_head = new Material(assetManager,
                     "Common/MatDefs/Misc/Unshaded.j3md");
-            mat_head.setColor("Color", startScreen.server != null ? ColorRGBA.Green : ColorRGBA.Red);
+            mat_head.setColor("Color", startScreen.server != null ? ColorRGBA.Blue : ColorRGBA.Red);
 
             node.setUserData("width", PLAYER_BODY_WIDTH);
             node.setUserData("height", PLAYER_BODY_HEIGHT);
@@ -542,7 +542,7 @@ public class MainMenu extends SimpleApplication implements ActionListener,
             mat_body.setColor("Color", colorPlayer2);
             Material mat_head = new Material(assetManager,
                     "Common/MatDefs/Misc/Unshaded.j3md");
-            mat_head.setColor("Color", startScreen.server != null ? ColorRGBA.Red : ColorRGBA.Green);
+            mat_head.setColor("Color", startScreen.server != null ? ColorRGBA.Red : ColorRGBA.Blue);
 
             node.setUserData("width", PLAYER_BODY_WIDTH);
             node.setUserData("height", PLAYER_BODY_HEIGHT);
@@ -667,5 +667,32 @@ public class MainMenu extends SimpleApplication implements ActionListener,
         if (rotation) {
             node[node_num_attac].setLocalRotation(Matrix3f.IDENTITY);
         }
+    }
+
+    public void clean() {
+        listEvents.add(new Callable() {
+            public Object call() throws Exception {
+                inputManager.clearMappings();
+                inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
+                inputManager.addMapping("Escape", new KeyTrigger(KeyInput.KEY_ESCAPE));
+                inputManager.addListener(MainMenu.this, "Escape");
+                inputManager.addListener(MainMenu.this, "MouseMoved");
+                ((Node) player).detachAllChildren();
+                ((Node) player2).detachAllChildren();
+                player = null;
+                player2 = null;
+                player_control = null;
+                player_control2 = null;
+                guiNode.detachAllChildren();
+                return null;
+            }
+        });
+    }
+
+    @Override
+    public void destroy() {
+        startScreen.cleanNetwork();
+        this.stop();
+        super.destroy();
     }
 }

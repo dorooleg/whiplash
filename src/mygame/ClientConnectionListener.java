@@ -12,19 +12,25 @@ import com.jme3.network.ClientStateListener;
  * @author user
  */
 public class ClientConnectionListener implements ClientStateListener {
+
     private StartScreen screen = null;
 
     public ClientConnectionListener(StartScreen screen) {
         this.screen = screen;
     }
-    
+
     public void clientConnected(Client c) {
+        //screen.owner.clean();
+        //screen.owner.initPlayer("player2");
+        //screen.nifty.gotoScreen("game");
+        screen.startGame("game");
     }
 
     public void clientDisconnected(Client c, DisconnectInfo info) {
-        screen.clean();
-        screen.clearPlayers();
-        screen.nifty.gotoScreen("start");
+        if (screen.client != null) {
+            screen.cleanNetwork();
+            screen.clearPlayers();
+            screen.nifty.gotoScreen("start");
+        }
     }
-    
 }

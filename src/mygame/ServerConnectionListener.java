@@ -19,11 +19,12 @@ public class ServerConnectionListener implements ConnectionListener {
         this.screen = screen;
     }
     public void connectionAdded(Server s, HostedConnection c) {
+        //screen.owner.clean();
         screen.startGame("game");
     }
     
     public void connectionRemoved(Server s, HostedConnection c) {
-        screen.clean();
+        screen.cleanNetwork();
         screen.clearPlayers();
         screen.nifty.gotoScreen("start");
     }

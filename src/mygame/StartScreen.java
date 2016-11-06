@@ -5,7 +5,6 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.network.Client;
 import com.jme3.network.Network;
-import com.jme3.network.Server;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.TextFieldChangedEvent;
@@ -17,32 +16,24 @@ import de.lessvoid.nifty.tools.SizeValue;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.util.concurrent.Callable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class StartScreen extends AbstractAppState implements ScreenController {
 
-    private final static int PORT = 6143;
     Nifty nifty;
     private Application app;
-    private Screen screen;
-    //private Element textField;
-    private MainMenu owner;
+    public MainMenu owner;
     private String ip;
-    public Server server = null;
-    public Client client = null;
+    public mygame.Server server = null;
+    public mygame.Client client = null;
     private Element progressBarElement;
     private Element progressBarWhipStatus;
     private Element progressBarElement_empty;
     private Element progressBarElement_blue;
     private Element progressBarWhipStatus_blue;
     private Element progressBarElement_empty_blue;
-    private TextRenderer textRenderer;
 
     public StartScreen(MainMenu owner) {
         this.owner = owner;
-        server = null;
-        client = null;
     }
 
     public void clearPlayers() {
@@ -52,13 +43,9 @@ public class StartScreen extends AbstractAppState implements ScreenController {
     public void startServer() {
         nifty.gotoScreen("server");
         try {
-            server = Network.createServer(PORT);
-            server.start();
-            server.addMessageListener(new ServerListener(owner), ProtocolMessage.class);
-            server.addConnectionListener(new ServerConnectionListener(this));
-            setTextOpenServerBody("Loading... " + Inet4Address.getLocalHost().getHostAddress() + ":" + PORT);
+            server = new mygame.Server(owner, this);
+            setTextOpenServerBody("Loading... ");
         } catch (Exception ex) {
-            Logger.getLogger(StartScreen.class.getName()).log(Level.SEVERE, null, ex);
             setTextOpenServerHead("Error creating server");
             setTextOpenServerBody("");
             server = null;
@@ -81,15 +68,18 @@ public class StartScreen extends AbstractAppState implements ScreenController {
     }
 
     public void cancelServer() {
-        System.out.println("Cancel Server");
         if (server != null) {
             server.close();
             server = null;
         }
-        nifty.gotoScreen("start");
+        gotoScreen("start");
+    }
+    
+    public void gotoScreen(String screen) {
+        nifty.gotoScreen(screen);
     }
 
-    public void clean() {
+    public void cleanNetwork() {
         if (server != null) {
             server.close();
             server = null;
@@ -103,18 +93,10 @@ public class StartScreen extends AbstractAppState implements ScreenController {
 
     public void startClient() {
         try {
-            client = Network.connectToServer(ip, 6143);
-            client.start();
-            client.addMessageListener(new ClientListener(owner), ProtocolMessage.class);
-            client.addErrorListener(new ClientErrorListener(this));
-            owner.initPlayer("player2");
-            nifty.gotoScreen("game");
-            //textField = nifty.getCurrentScreen().findElementByName("input");
-        } catch (IOException ex) {
-            Logger.getLogger(StartScreen.class.getName()).log(Level.SEVERE, null, ex);
+            client = new mygame.Client(ip, owner, this);
+        } catch (Exception ex) {
             setTextClient("Error connection to server");
         }
-
     }
 
     public void setProgress(final float progress) {
@@ -124,6 +106,7 @@ public class StartScreen extends AbstractAppState implements ScreenController {
 
             progressBarElement.setConstraintWidth(new SizeValue(pixelWidth + "px"));
             progressBarElement.getParent().layoutElements();
+            progressBarElement.setVisible(true);
         } else {
             progressBarElement.setVisible(false);
         }
@@ -227,7 +210,6 @@ public class StartScreen extends AbstractAppState implements ScreenController {
 
 
         this.nifty = nifty;
-        this.screen = screen;
 
     }
 
