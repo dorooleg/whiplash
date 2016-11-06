@@ -1,7 +1,6 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.bounding.BoundingBox;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
@@ -10,7 +9,6 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.material.Material;
-import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Matrix3f;
@@ -21,12 +19,12 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
-import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture2D;
 import com.jme3.ui.Picture;
 import de.lessvoid.nifty.Nifty;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,6 +48,7 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
     private Sound sound;
     private ColorRGBA colorPlayer;
     private ColorRGBA colorPlayer2;
+    private Random generator = new Random();
 
     public MainMenu() {
         listEvents = new ArrayList<Callable>();
@@ -97,7 +96,7 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
 
         if (name.equals("Escape")) {
             startScreen.cleanNetwork();
-            startScreen.clearPlayers();
+            clean();
             startScreen.start("start");
         }
 
@@ -186,8 +185,9 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
         player = getSpatial("player1");
         ((Node) player).attachChild(node_whip1[0]);
 
-        player.setLocalTranslation(settings.getWidth() / 2,
-                settings.getHeight() / 2, 0f);
+        float randomX = 120 + (int) generator.nextInt(settings.getWidth() - 240);
+        float randomY = 65 + (int) generator.nextInt(settings.getHeight() - 105);
+        player.setLocalTranslation(randomX, randomY, 0f);
         player_control = new PlayerControl(settings.getWidth(),
                 settings.getHeight(),
                 (int) PLAYER_BODY_WIDTH, (int) PLAYER_BODY_HEIGHT,
@@ -244,6 +244,14 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
                 return null;
             }
         });
+
+        if (startScreen.client != null) {
+            startScreen.client.send(getProtocolMessage());
+        }
+
+        if (startScreen.server != null) {
+            startScreen.server.broadcast(getProtocolMessage());
+        }
     }
 
     void clearPlayers() {
