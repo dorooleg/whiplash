@@ -673,17 +673,15 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
         listEvents.add(new Callable() {
             public Object call() throws Exception {
                 inputManager.clearMappings();
-                inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
-                inputManager.addMapping("Escape", new KeyTrigger(KeyInput.KEY_ESCAPE));
-                inputManager.addListener(MainMenu.this, "Escape");
-                inputManager.addListener(MainMenu.this, "MouseMoved");
-                ((Node) player).detachAllChildren();
-                ((Node) player2).detachAllChildren();
+                guiNode.detachAllChildren();
                 player = null;
                 player2 = null;
                 player_control = null;
                 player_control2 = null;
-                guiNode.detachAllChildren();
+                inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
+                inputManager.addMapping("Escape", new KeyTrigger(KeyInput.KEY_ESCAPE));
+                inputManager.addListener(MainMenu.this, "Escape");
+                inputManager.addListener(MainMenu.this, "MouseMoved");
                 return null;
             }
         });

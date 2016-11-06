@@ -20,17 +20,12 @@ public class ClientConnectionListener implements ClientStateListener {
     }
 
     public void clientConnected(Client c) {
-        //screen.owner.clean();
-        //screen.owner.initPlayer("player2");
-        //screen.nifty.gotoScreen("game");
         screen.startGame("game");
     }
 
     public void clientDisconnected(Client c, DisconnectInfo info) {
-        if (screen.client != null) {
-            screen.cleanNetwork();
-            screen.clearPlayers();
-            screen.nifty.gotoScreen("start");
-        }
+        screen.cleanNetwork();
+        screen.owner.clean();
+        screen.nifty.gotoScreen("start");
     }
 }

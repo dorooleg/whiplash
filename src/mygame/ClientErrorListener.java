@@ -20,7 +20,7 @@ public class ClientErrorListener implements ErrorListener {
 
     public void handleError(Object source, Throwable t) {
         screen.cleanNetwork();
-        screen.clearPlayers();
+        screen.owner.clean();
         screen.nifty.gotoScreen("start");
     }
 }
