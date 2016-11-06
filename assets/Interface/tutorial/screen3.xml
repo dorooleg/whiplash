@@ -10,29 +10,35 @@
              align="center" 
              width="100%" height="100%">
       </image>
-      <image filename="Interface/tutorial/menu.png" 
+<!--      <image filename="Interface/tutorial/menu.png" 
              align="center" 
              width="80%" height="80%">
-      </image>
+      </image>-->
     </layer>
-    <layer id="foreground" childLayout="vertical">
-      <panel id="panel_top" height="25%" width="75%" align="center" childLayout="center">  
-        <text text="WHIPLASH" font="Interface/Fonts/Default.fnt" width="100%" height="100%" />
+    <layer id="foreground" childLayout="vertical" > 
+      <panel id="panel_top" height="25%" width="75%" align="right" childLayout="center">  
+        <text text="" font="Interface/Fonts/Default.fnt" width="100%" height="100%" />
       </panel>
-      <panel id="panel_mid" height="15%" width="100%" align="center" childLayout="center">       
-        <text text="WellCome" 
+      <panel id="panel_mid" height="23%" width="100%" align="right" childLayout="center">       
+        <text text="" 
         font="Interface/Fonts/Default.fnt" width="50%" height="50%" wrap="true" />
       </panel>
-      <panel id="panel_bottom" height="15%" width="25%" align="center" childLayout="vertical">  
+      <panel id="panel_bottom" paddingRight="50px"  margin="-35px"  align="right" height="15%" width="25%" childLayout="vertical">  
+        <panel id="panel_mid" height="55%" width="110%" align="right" childLayout="center">       
+          <text text="Wellcome  to  WHIPLASH" 
+          font="Interface/Fonts/Default.fnt" width="100%" height="50%" wrap="true" />
+        </panel>
         <panel id="panel_bottom_left" height="50%" width="100%" valign="center" childLayout="center">  
-          <control name="button" label="Start"  id="StartButton" align="center" valign="center" 
+          <control name="button" label="Start" height="100%" width="100%" 
+                   id="StartButton" align="center" valign="center" 
                    visibleToMouse="true"> 
             <interact onClick="start(hud)" />
 
           </control>
         </panel>
         <panel id="panel_bottom_left" height="50%" width="100%" valign="center" childLayout="center">  
-          <control name="button" label="Optinal" id="StartButton" align="center" valign="center" 
+          <control name="button" label="Optinal" height="100%" width="100%"
+                   id="StartButton" align="center" valign="center" 
                    visibleToMouse="true"> 
             <interact onClick="start(hud2)" />
           </control>
@@ -44,8 +50,9 @@
           </control>
         </panel>-->
         <panel id="panel_bottom_right" height="50%" width="100%" valign="center" childLayout="center">  
-          <control name="button" label="Quit" id="QuitButton" align="center" valign="center" 
-          visibleToMouse="true" > 
+          <control name="button" label="Quit"height="100%" width="100%"
+                   id="QuitButton" align="center" valign="center" 
+                   visibleToMouse="true" > 
             <interact onClick="quitGame()"/>
           </control>
         </panel>
@@ -53,86 +60,124 @@
     </layer>
   </screen>
   
-  
-  
   <screen id="hud" controller="mygame.StartScreen">
-      <layer id="background" childLayout="center">
-        <image filename="Interface/tutorial/start-background.png" 
-             align="center" 
-             width="100%" height="100%">
-        </image>
-        <image filename="Interface/tutorial/menu.png" 
-             align="center" 
-             width="80%" height="80%">
-        </image>
-      </layer>
-    <layer id="foreground" childLayout="horizontal">
-
-      <panel id="panel_bottom" height="25%" width="100%" align="center" childLayout="vertical" >  
-        <panel id="panel_bottom_left" height="150%" width="100%" valign="center" childLayout="center">  
-          
-        </panel>
-        <panel id="panel_bottom_left" height="50%" width="100%" valign="center" childLayout="center">  
-          <control name="button" label="Server" id="StartButton" align="center" valign="center" 
-                   visibleToMouse="true"> 
-            <interact onClick="startServer(server)" />
-          </control>
-        </panel>
-        <panel id="panel_bottom_left" height="10%" width="100%" valign="center" childLayout="center">  
-          <control name="button" label="Client" id="StartButton" align="center" valign="center" 
-                   visibleToMouse="true"> 
-            <interact onClick="start(ip)" />
-          </control>
-<!--          <control name="textfield" maxLength="20" width="10%" id="ip_txt" align="center" valign="center" 
-                   visibleToMouse="true"> 
-            
-          </control>-->
-        </panel>
-        <panel id="panel_bottom_left" height="50%" width="100%" valign="center" childLayout="center">  
-          <control name="button" label="Return" id="StartButton" align="center" valign="center" 
-                   visibleToMouse="true"> 
-            <interact onClick="start(start)" />
-          </control>
-        </panel>
-        
-      </panel>
-    </layer>
-  </screen>
-  
-    <screen id="hud2" controller="mygame.StartScreen">
     <layer id="background" childLayout="center">
       <image filename="Interface/tutorial/start-background.png" 
              align="center" 
              width="100%" height="100%">
-      </image>
-      <image filename="Interface/tutorial/menu.png" 
-             align="center" 
-             width="80%" height="80%">
-      </image>
+      </image>->
     </layer>
-    <layer id="foreground" childLayout="horizontal">
-
-      <panel id="panel_bottom" height="25%" width="100%" align="center" childLayout="vertical" >  
-        <panel id="panel_bottom_left" height="150%" width="100%" valign="center" childLayout="center">  
-          
+    <layer id="foreground" childLayout="vertical" > 
+      <panel id="panel_top" height="25%" width="75%" align="right" childLayout="center">  
+        <text text="" font="Interface/Fonts/Default.fnt" width="100%" height="100%" />
+      </panel>
+      <panel id="panel_mid" height="23%" width="100%" align="right" childLayout="center">       
+        <text text="" 
+        font="Interface/Fonts/Default.fnt" width="50%" height="50%" wrap="true" />
+      </panel>
+      <panel id="panel_bottom" paddingRight="50px"  margin="-35px"  align="right" height="15%" width="25%" childLayout="vertical">  
+        <panel id="panel_mid" height="55%" width="110%" align="right" childLayout="center">       
+          <text text="" 
+          font="Interface/Fonts/Default.fnt" width="100%" height="50%" wrap="true" />
         </panel>
-        
-        <panel id="panel_mid" height="15%" width="100%" align="center" childLayout="center">       
-          <text text="Well come to Whiplash. " 
-          font="Interface/Fonts/Default.fnt" width="50%" height="50%" wrap="true" />
-        </panel>
-        <panel id="panel_bottom_left" height="60%" width="100%" valign="center" childLayout="center">  
-          <control name="button" label="Return" id="StartButton" align="center" valign="center" 
+        <panel id="panel_bottom_left" height="50%" width="100%" valign="center" childLayout="center">  
+          <control name="button" label="Server" height="100%" width="100%" 
+                   id="StartButton" align="center" valign="center" 
                    visibleToMouse="true"> 
-            <interact onClick="start(start)" />
+            <interact onClick="startServer(server)" />
+
           </control>
         </panel>
-        
+        <panel id="panel_bottom_left" height="50%" width="100%" valign="center" childLayout="center">  
+          <control name="button" label="Client" height="100%" width="100%"
+                   id="StartButton" align="center" valign="center" 
+                   visibleToMouse="true"> 
+            <interact onClick="start(ip)" />
+          </control>
+        </panel>
+        <panel id="panel_bottom_right" height="50%" width="100%" valign="center" childLayout="center">  
+          <control name="button" label="Return"height="100%" width="100%"
+                   id="QuitButton" align="center" valign="center" 
+                   visibleToMouse="true" > 
+            <interact onClick="start(start)"/>
+          </control>
+        </panel>
       </panel>
     </layer>
   </screen>
   
-    <screen id="ip" controller="mygame.StartScreen">
+  
+<screen id="hud2" controller="mygame.StartScreen">
+    <layer id="background" childLayout="center">
+      <image filename="Interface/tutorial/start-background.png" 
+             align="center" 
+             width="100%" height="100%">
+      </image>->
+    </layer>
+    <layer id="foreground" childLayout="vertical" > 
+      <panel id="panel_top" height="25%" width="75%" align="right" childLayout="center">  
+        <text text="" font="Interface/Fonts/Default.fnt" width="100%" height="100%" />
+      </panel>
+      <panel id="panel_mid" height="23%" width="100%" align="right" childLayout="center">       
+        <text text="" 
+        font="Interface/Fonts/Default.fnt" width="50%" height="50%" wrap="true" />
+      </panel>
+      <panel id="panel_bottom" paddingRight="50px"  margin="-35px"  align="right" height="15%" width="25%" childLayout="vertical">  
+        <panel id="panel_mid" height="55%" width="110%" align="right" childLayout="center">       
+          <text text="Opisanie" 
+          font="Interface/Fonts/Default.fnt" width="100%" height="50%" wrap="true" />
+        </panel>
+        
+        <panel id="panel_bottom_right" height="50%" width="100%" valign="center" childLayout="center">  
+          <control name="button" label="Return"height="100%" width="100%"
+                   id="StartButton" align="center" valign="center" 
+                   visibleToMouse="true" > 
+            <interact onClick="start(start)"/>
+          </control>
+        </panel>
+      </panel>
+    </layer>
+  </screen>
+  
+  <screen id="ip" controller="mygame.StartScreen">
+    <layer id="background" childLayout="center">
+      <image filename="Interface/tutorial/start-background.png" 
+             align="center" 
+             width="100%" height="100%">
+      </image>->
+    </layer>
+    <layer id="foreground" childLayout="vertical" > 
+      <panel id="panel_top" height="25%" width="75%" align="right" childLayout="center">  
+        <text text="" font="Interface/Fonts/Default.fnt" width="100%" height="100%" />
+      </panel>
+      <panel id="panel_mid" height="23%" width="100%" align="right" childLayout="center">       
+        <text text="" 
+        font="Interface/Fonts/Default.fnt" width="50%" height="50%" wrap="true" />
+      </panel>
+      <panel id="panel_bottom" paddingRight="50px"  margin="-35px"  align="right" height="15%" width="25%" childLayout="vertical">  
+        <panel id="panel_mid" height="55%" width="110%" align="right" childLayout="center">       
+          <text text="Please Press Your ip-adress: " 
+          font="Interface/Fonts/Default.fnt" width="100%" height="50%" wrap="true" />
+        </panel>
+        <panel id="panel_bottom" paddingRight="15px"  margin="15px"  align="center" height="15%" width="35%" childLayout="vertical">           
+          <control name="textfield" maxLength="20" width="250%" id="ip_txt" align="center" valign="center" 
+                   visibleToMouse="true">            
+          </control>
+        </panel>
+        <panel id="panel_bottom_right" height="50%" width="100%" valign="center" childLayout="center">  
+          <control name="button" label="OK"height="100%" width="100%"
+                   id="StartButton" align="center" valign="center" 
+                   visibleToMouse="true" > 
+            <interact onClick="startClient()"/>
+          </control>
+        </panel>
+      </panel>
+    </layer>
+  </screen>
+  
+
+  
+<!--    <screen id="ip" controller="mygame.StartScreen">
     <layer id="background" childLayout="center">
       <image filename="Interface/tutorial/start-background.png" 
              align="center" 
@@ -172,8 +217,42 @@
       </panel>
     </layer>
   </screen>
+  -->
+  
   
   <screen id="server" controller="mygame.StartScreen">
+    <layer id="background" childLayout="center">
+      <image filename="Interface/tutorial/start-background.png" 
+             align="center" 
+             width="100%" height="100%">
+      </image>->
+    </layer>
+    <layer id="foreground" childLayout="vertical" > 
+      <panel id="panel_top" height="25%" width="75%" align="right" childLayout="center">  
+        <text text="" font="Interface/Fonts/Default.fnt" width="100%" height="100%" />
+      </panel>
+      <panel id="panel_mid" height="23%" width="100%" align="right" childLayout="center">       
+        <text text="" 
+        font="Interface/Fonts/Default.fnt" width="50%" height="50%" wrap="true" />
+      </panel>
+      <panel id="panel_bottom" paddingRight="50px"  margin="-35px"  align="right" height="15%" width="25%" childLayout="vertical">  
+        <panel id="panel_mid" height="55%" width="110%" align="right" childLayout="center">       
+          <text text="Please wait... " 
+          font="Interface/Fonts/Default.fnt" width="100%" height="50%" wrap="true" />
+        </panel>
+        
+        <panel id="panel_bottom_right" height="50%" width="100%" valign="center" childLayout="center">  
+          <control name="button" label="Cancel" height="100%" width="100%"
+                   id="StartButton" align="center" valign="center" 
+                   visibleToMouse="true" > 
+            <interact onClick="cancelServer()"/>
+          </control>
+        </panel>
+      </panel>
+    </layer>
+  </screen>
+  
+<!--  <screen id="server" controller="mygame.StartScreen">
     <layer id="background" childLayout="center">
       <image filename="Interface/tutorial/start-background.png" 
              align="center" 
@@ -208,7 +287,7 @@
              
       </panel>
     </layer>
-  </screen>
+  </screen>-->
   
   <screen id="game" controller="mygame.StartScreen">
     <layer id="background" childLayout="center">
@@ -216,25 +295,97 @@
              width="100%" height="100%">
       </image>
     </layer>
+    
     <layer id="foreground" childLayout="horizontal">
-      <panel id="panel_left"  align="left" valign="bottom"  width="20%" height="100%" childLayout="vertical" >  
-        <panel id="panel_bot_left" width="50%" height="5%" align="center" valign="center"  childLayout="vertical">  
-           <control name="loadingbar_blue"  width="100px" height="32px" />
+        
+      <panel id="panel_left"  align="left" valign="bottom" width="20%" height="58%" childLayout="vertical" >  
+        <panel id="panel_bot_left" width="100%" height="15%" align="center" 
+               valign="center"  childLayout="vertical">  
+           
+           <control name="loadingbar_blue" width="100px" height="32px"/>
            <control name="loadingbar_empty_blue" x="-100px" y="-32px"
-                    width="100px" height="32px"/>
-           <control name="loadingbar2_blue"  width="100px" height="32px" />
-         </panel>
+                    width="100px" height="219px"/>
+           <!--<control name="loadingbar2_blue" x="0px" y="0px" width="100px" height="32px"/>-->
+           
         </panel>
-      <panel id="panel_right" align="right" valign="bottom"  width="20%" height="100%" childLayout="vertical" >  
-        <panel id="panel_bot_right" width="50%" height="5%"  childLayout="vertical">  
+        <panel id="panel_bot_left" width="100%" height="5%" align="center" 
+               valign="center"  childLayout="vertical">  
+           
+           <!--<control name="loadingbar_blue" width="100px" height="32px"/>-->
+           
+           <control name="loadingbar2_blue" x="0px" y="0px" width="100px" height="32px"/>
+           
+        </panel>
+      </panel>
+      <panel id="panel_right" align="right" valign="bottom"  width="68%" height="58%" childLayout="horizontal" >
+      </panel>
+      <panel id="panel_right" align="right" valign="bottom"  width="120%" height="58%" childLayout="vertical" >  
+        <panel id="panel_bot_right" width="10%" height="15%"  childLayout="vertical">
          <control name="loadingbar" width="100px" height="32px" />
-         <control name="loadingbar_empty"  x="-100px" y="-32px"
-                  width="100px" height="32px"/>
+         <control name="loadingbar_empty" x="-100px" y="32px"
+                  width="100px" height="219px"/>
+         <!--<control name="loadingbar2"  width="100px" height="32px" />-->
+        </panel>
+        <panel id="panel_bot_right" width="10%" height="5%"  childLayout="vertical">
+         <!--<control name="loadingbar" width="100px" height="32px" />-->
+         <!--<control name="loadingbar_empty" x="-100px" y="32px"-->
+                  width="100px" height="219px"/>
          <control name="loadingbar2"  width="100px" height="32px" />
         </panel>
       </panel>
     </layer>
     
+  </screen>
+  
+   <screen id="win" controller="mygame.StartScreen">
+    <layer id="background" childLayout="center">
+      <image filename="Interface/tutorial/game_over.png" 
+             align="center" 
+             width="100%" height="100%">
+      </image>    
+    </layer>
+    <layer id="foreground" childLayout="horizontal">
+      <panel id="panel_bottom" height="50%" width="100%" align="center" childLayout="vertical" >  
+        <panel id="panel_bottom_left" height="150%" width="100%" valign="center" childLayout="center">           
+        </panel>      
+        <panel id="panel_mid" height="15%" width="100%" align="center" childLayout="center">       
+          <text id="text_open_server_head" text="You Win" 
+          font="Interface/Fonts/Default.fnt" width="50%" height="50%" wrap="true" />
+        </panel>      
+        <panel id="panel_bottom_left" height="15%" width="100%" valign="center" childLayout="center">  
+          <control name="button" label="Repeat?" id="StartButton" align="center" valign="center" 
+                   visibleToMouse="true"> 
+            <interact onClick="start(start)" />
+          </control>
+        </panel>             
+      </panel>
+    </layer>
+  </screen>
+  
+  <screen id="lose" controller="mygame.StartScreen">
+    <layer id="background" childLayout="center">
+      <image filename="Interface/tutorial/game_over.png" 
+             align="center" 
+             width="100%" height="100%">
+      </image>    
+    </layer>
+    <layer id="foreground" childLayout="horizontal">
+      <panel id="panel_bottom" height="50%" width="100%" align="center" childLayout="vertical" >  
+        <panel id="panel_bottom_left" height="150%" width="100%" valign="center" childLayout="center">           
+        </panel>      
+        <panel id="panel_mid" height="15%" width="100%" align="center" childLayout="center">       
+          <text id="text_open_server_head" text="You Lose" 
+          font="Interface/Fonts/Default.fnt" width="50%" height="50%" wrap="true" />
+        </panel>      
+        <panel id="panel_bottom_left" height="15%" width="100%" valign="center" childLayout="center">  
+          <control name="button" label="Repeat?" id="StartButton" align="center" valign="center" 
+                   visibleToMouse="true"> 
+            <interact onClick="start(start)" />
+          </control>
+        </panel> 
+             
+      </panel>
+    </layer>
   </screen>
 
   
@@ -244,11 +395,12 @@
         <image filename="Interface/border.png" childLayout="absolute" 
                imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15">
             <image id="progressbar1" x="0" y="0" filename="Interface/inner.png"
+                   
                    width="32px" 
                    height="100%"
                    imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15"/>
         </image>
-    </controlDefinition>
+  </controlDefinition>
 
 
     <controlDefinition name = "loadingbar2" controller = "mygame.StartScreen">
@@ -299,55 +451,6 @@
     </controlDefinition>
   
   
-    <screen id="win" controller="mygame.StartScreen">
-    <layer id="background" childLayout="center">
-      <image filename="Interface/tutorial/game_over.jpg" 
-             align="center" 
-             width="100%" height="100%">
-      </image>    
-    </layer>
-    <layer id="foreground" childLayout="horizontal">
-      <panel id="panel_bottom" height="50%" width="100%" align="center" childLayout="vertical" >  
-        <panel id="panel_bottom_left" height="150%" width="100%" valign="center" childLayout="center">           
-        </panel>      
-        <panel id="panel_mid" height="15%" width="100%" align="center" childLayout="center">       
-          <text id="text_open_server_head" text="You Win" 
-          font="Interface/Fonts/Default.fnt" width="50%" height="50%" wrap="true" />
-        </panel>      
-        <panel id="panel_bottom_left" height="15%" width="100%" valign="center" childLayout="center">  
-          <control name="button" label="Repeat?" id="StartButton" align="center" valign="center" 
-                   visibleToMouse="true"> 
-            <interact onClick="start(start)" />
-          </control>
-        </panel>             
-      </panel>
-    </layer>
-  </screen>
-  
-  <screen id="lose" controller="mygame.StartScreen">
-    <layer id="background" childLayout="center">
-      <image filename="Interface/tutorial/game_over.jpg" 
-             align="center" 
-             width="100%" height="100%">
-      </image>    
-    </layer>
-    <layer id="foreground" childLayout="horizontal">
-      <panel id="panel_bottom" height="50%" width="100%" align="center" childLayout="vertical" >  
-        <panel id="panel_bottom_left" height="150%" width="100%" valign="center" childLayout="center">           
-        </panel>      
-        <panel id="panel_mid" height="15%" width="100%" align="center" childLayout="center">       
-          <text id="text_open_server_head" text="You Lose" 
-          font="Interface/Fonts/Default.fnt" width="50%" height="50%" wrap="true" />
-        </panel>      
-        <panel id="panel_bottom_left" height="15%" width="100%" valign="center" childLayout="center">  
-          <control name="button" label="Repeat?" id="StartButton" align="center" valign="center" 
-                   visibleToMouse="true"> 
-            <interact onClick="start(start)" />
-          </control>
-        </panel> 
-             
-      </panel>
-    </layer>
-  </screen>
+    
   
 </nifty>

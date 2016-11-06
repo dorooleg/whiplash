@@ -9,7 +9,7 @@ public class Main {
         settings.setVSync(true);
         settings.setSamples(16);
         
-        settings.setResolution(800, 600);
+        settings.setResolution(814, 528);
         MainMenu app = new MainMenu();
         app.setShowSettings(false);
         
