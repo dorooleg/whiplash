@@ -1,6 +1,7 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.bounding.BoundingBox;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
@@ -9,6 +10,7 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Matrix3f;
@@ -18,7 +20,6 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.control.BillboardControl;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture2D;
@@ -459,39 +460,12 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
                 startScreen.nifty.gotoScreen("lose");
             }
         }
-
-        /*
-         Material mat_head = new Material(assetManager,
-         "Common/MatDefs/Misc/Unshaded.j3md");
-         mat_head.setColor("Color", startScreen.server != null ? colorPlayer : colorPlayer);
-         player2.setMaterial(mat_head);
-         */
-
-//        if (startScreen.client != null) {
-//            startScreen.client.send(getProtocolMessage());
-//        }
-//
-//        if (startScreen.server != null) {
-//            startScreen.server.broadcast(getProtocolMessage());
-//        }
     }
 
     private void handleCollision() {
         if (player.getControl(PlayerControl.class).inRadiusWhipHit(player2.getLocalTranslation())) {;
             player2.getControl(PlayerControl.class).decreaseHealth();
-
-//            if (startScreen.server == null) {
-//                startScreen.setProgress(player.getControl(PlayerControl.class).getHealth());
-//                startScreen.setProgress_Blue(player2.getControl(PlayerControl.class).getHealth());
-//            } else {
-//                startScreen.setProgress(player.getControl(PlayerControl.class).getHealth());
-//                startScreen.setProgress_Blue(player2.getControl(PlayerControl.class).getHealth());
-//            }
-
         }
-//        if (player2.getControl(PlayerControl.class).inRadiusWhipHit(player.getLocalTranslation())){
-//            player.getControl(PlayerControl.class).decreaseHealth();
-//        }
     }
 
     private void initCamera() {
@@ -514,7 +488,7 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
             mat_body.setColor("Color", colorPlayer);
             Material mat_head = new Material(assetManager,
                     "Common/MatDefs/Misc/Unshaded.j3md");
-            mat_head.setColor("Color", startScreen.server != null ? ColorRGBA.Blue : ColorRGBA.Red);
+            mat_head.setColor("Color", startScreen.server != null ? ColorRGBA.Red : ColorRGBA.Blue);
 
             node.setUserData("width", PLAYER_BODY_WIDTH);
             node.setUserData("height", PLAYER_BODY_HEIGHT);
@@ -524,6 +498,15 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
                     PLAYER_BODY_HEIGHT, 0));
             body.setMaterial(mat_body);
 
+            Picture boody_rect = new Picture("body");
+            Texture2D tex = (Texture2D) assetManager.loadTexture("Interface/rectangle.png");
+            boody_rect.setTexture(assetManager, tex, true);
+            boody_rect.setWidth(PLAYER_BODY_WIDTH * 2);
+            boody_rect.setHeight(PLAYER_BODY_HEIGHT * 2);
+            boody_rect.move(-PLAYER_BODY_WIDTH,
+                    -PLAYER_BODY_HEIGHT, 0);
+
+
             Geometry head = new Geometry("head",
                     new Box(PLAYER_BODY_WIDTH / 4f,
                     PLAYER_BODY_HEIGHT / 4f, 0));
@@ -531,6 +514,7 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
             head.setLocalTranslation(PLAYER_BODY_WIDTH, 0, 0);
 
             node.attachChild(body);
+            node.attachChild(boody_rect);
             node.attachChild(head);
 
             return node;
@@ -540,9 +524,19 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
             Material mat_body = new Material(assetManager,
                     "Common/MatDefs/Misc/Unshaded.j3md");
             mat_body.setColor("Color", colorPlayer2);
+
+            Picture boody_rect = new Picture("body");
+            Texture2D tex = (Texture2D) assetManager.loadTexture("Interface/rectangle.png");
+            boody_rect.setTexture(assetManager, tex, true);
+            boody_rect.setWidth(PLAYER_BODY_WIDTH * 2);
+            boody_rect.setHeight(PLAYER_BODY_HEIGHT * 2);
+            boody_rect.move(-PLAYER_BODY_WIDTH,
+                    -PLAYER_BODY_HEIGHT, 0);
+
+
             Material mat_head = new Material(assetManager,
                     "Common/MatDefs/Misc/Unshaded.j3md");
-            mat_head.setColor("Color", startScreen.server != null ? ColorRGBA.Red : ColorRGBA.Blue);
+            mat_head.setColor("Color", startScreen.server != null ? ColorRGBA.Blue : ColorRGBA.Red);
 
             node.setUserData("width", PLAYER_BODY_WIDTH);
             node.setUserData("height", PLAYER_BODY_HEIGHT);
@@ -559,6 +553,7 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
             head.setLocalTranslation(PLAYER_BODY_WIDTH, 0, 0);
 
             node.attachChild(body2);
+            node.attachChild(boody_rect);
             node.attachChild(head);
 
             return node;
@@ -631,15 +626,6 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
         sound.whip();
         handleCollision();
         draw_Node(name_player, 0, 1, false);
-
-//        if (startScreen.server == null) {
-//            startScreen.setProgress(player.getControl(PlayerControl.class).getHealth());
-//            startScreen.setProgress_Blue(player2.getControl(PlayerControl.class).getHealth());
-//        } else {
-//            startScreen.setProgress(player.getControl(PlayerControl.class).getHealth());
-//            startScreen.setProgress_Blue(player2.getControl(PlayerControl.class).getHealth());
-//        }
-
     }
 
     private void draw_Node(String name_player, int node_num_detach,
@@ -657,10 +643,6 @@ public class MainMenu extends SimpleApplication implements ActionListener, Analo
         if (playerNode == null || node == null) {
             return;
         }
-//        if (startScreen.server != null)
-//        startScreen.setProgress(playerNode.getControl(PlayerControl.class).getHealth());
-////          else
-//        startScreen.setProgress_Blue(playerNode.getControl(PlayerControl.class).getHealth());
 
         playerNode.detachChildNamed(node[node_num_detach].getName());
         playerNode.attachChild(node[node_num_attac]);
