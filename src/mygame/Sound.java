@@ -26,10 +26,7 @@ public class Sound {
     }
 
     private void loadSounds() {
-//        
-        
-        
-        music = new AudioNode(assetManager, "Sounds/7-sins-OST-East-Wing.wav");
+        music = new AudioNode(assetManager, "Sounds/Music.ogg");
         music.setPositional(false);
         music.setReverbEnabled(false);
         music.setLooping(true);
